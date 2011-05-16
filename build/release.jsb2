@@ -1,0 +1,28 @@
+{
+	projectName: 'Sample Module',
+	licenseText: '',
+	deployDir: 'deploy/',
+	pkgs: [{
+		name: 'Sample Module',
+		file: 'content/javascript/argos-sample.js',
+		isDebug: true,
+		fileIncludes: [
+                {
+                    text: 'ApplicationModule.js',
+                    path: '../src/'
+                },
+                {
+                    text: 'List.js',
+                    path: '../src/views/TicketActivity'
+                }]
+	}],
+	resources: [{
+		src: '../content',
+		dest: 'content',
+		filters: ".*(\\.css|\\.jpg|\\.png|\\.gif)"
+	},{
+		src: '../configuration',
+		dest: 'configuration/sample',
+		filters: ".*\\.js"
+	}]
+}
