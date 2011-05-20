@@ -42,9 +42,11 @@ Installation
         <!-- Configuration -->
         <script type="text/javascript" src="../argos-sample/configuration/development.js"></script>
 
-3.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
+**Note:** Add the argos-sample Configuration line after the existing one from index-dev.html, don't replace it.
 
-		http://localhost/mobile/products/argos-saleslogix/index-dev.html
+3.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
+
+		http://localhost/mobile/products/argos-saleslogix/index-dev-sample.html
 
 ### Building A Release Version
 
