@@ -42,9 +42,9 @@ Installation
         <!-- Configuration -->
         <script type="text/javascript" src="../argos-sample/configuration/development.js"></script>
 
-**Note:** Add the argos-sample Configuration line after the existing one from index-dev.html, don't replace it.
+  **Note:** Insert the argos-sample Configuration line after the existing one from index-dev.html, don't replace it.
 
-3.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
+4.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
 
 		http://localhost/mobile/products/argos-saleslogix/index-dev-sample.html
 
@@ -55,7 +55,7 @@ Installation
 
 #### Steps
 1.	Save this [gist](https://gist.github.com/815451) as `build-module.cmd` to the directory where you cloned [Argos SDK][argos-sdk] (The same folder where you created the Products folder).
-2.	Open a command prompt and excute the following, changing paths as appropriate, eg:
+2.	Open a command prompt and execute the following, changing paths as appropriate, eg:
 
         cd \projects\sage\mobile
         build-module sample
