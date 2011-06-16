@@ -25,6 +25,8 @@ Mobile.Sample.ApplicationModule = Ext.extend(Sage.Platform.Mobile.ApplicationMod
     loadViews: function() {
         Mobile.Sample.ApplicationModule.superclass.loadViews.apply(this, arguments);
 
+       //Register custom Google Map view
+        this.registerView(new Mobile.Sample.GoogleMap());
 	   //Register TicketActivity list view, but don't show on home page.
         this.registerView(new Mobile.Sample.TicketActivity.List({
             id: 'ticketActivity_related',
@@ -105,7 +107,33 @@ Mobile.Sample.ApplicationModule = Ext.extend(Sage.Platform.Mobile.ApplicationMod
             at: function(row) { return row.name == 'LeadSource.Description'; },
             type: 'remove'
         });
-        
+
+        //Add a quick action to Account detail to show custom map view
+        this.registerCustomization('detail', 'account_detail', {
+            at: function(row) { return row.action === 'addNote' },
+            type: 'insert',
+            value: {
+                value: 'Show Map',
+                label: 'location',
+                icon: 'content/images/icons/Map_24.png',
+                action: 'showMap'
+            }
+        });
+
+        //Add the supporting action method to the account detail
+        Ext.override(Mobile.SalesLogix.Account.Detail, {
+            showMap: function() {
+                var view = App.getView('googlemapview');
+                if (view)
+                    view.show({
+                        key: this.options.key,
+                        entity: 'Account',
+                        address: Mobile.SalesLogix.Format.address(this.entry['Address'], true, ' '),
+                        markerTitle: this.entry['AccountName'],
+                        entry: this.entry
+                    });
+            }
+        });
 
         //Some customizations require extending the view class.
         Ext.override(Mobile.SalesLogix.Account.Detail, {

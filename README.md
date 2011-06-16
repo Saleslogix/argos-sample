@@ -1,9 +1,11 @@
-About
------
-###Overview
+# About
+
+- - - - - -
+
+### Overview
 This sample module was designed to show how you can add customizations to an existing project based on the Argos SDK. This module was designed to supplement the [argos-saleslogix][argos-saleslogix] project.
 
-###Included Examples
+### Included Examples
 *  Creating and registering a custom list view (Ticket Activities)
 *  Adding a Quick Action to an existing view (Account Detail)
 *  Add a field to existing detail and edit views (Account Detail/Edit)
@@ -11,9 +13,13 @@ This sample module was designed to show how you can add customizations to an exi
 *  Hide a field on an existing view (Account Detail)
 *  Add a custom Toolbar button to an existing view (Account Detail)
 *  Override the layout template for a list view (Contact List)
+*  Add a custom view that derives from the base view type (Google Map view)
+*  Example of overriding CSS styling (sample-app.css)
 
-Installation
-------------
+#Installation
+
+- - - - - 
+
 ### Prerequisites
 *	A web server
 
