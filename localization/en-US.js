@@ -6,7 +6,9 @@
 			if (target) Ext.override(target, values);
 		};
 
-	localize('Mobile.SalesLogix.Account.Detail', {
-		accountText: 'acct'
+    //localize strings for src/views/account/detail.js
+    localize('Mobile.SalesLogix.Account.Detail', {
+        accountText: 'tnuocca'
 	});
+
 })();

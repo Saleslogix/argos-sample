@@ -1,0 +1,17 @@
+/*** Override argos-saleslogix footer toolbar height to account for copyright text ***/
+.footer-toolbar
+{
+    height: 60px;
+}
+
+/*** Make action list light goldenrod yellow ***/
+.panel-content > ul.action-list {
+    background-color: #fafad2;
+    border: 0 none black;
+}
+
+/*** On validation error, make label red ***/
+.panel-content > fieldset > .row-error > label {
+    color: red;
+}
+
