@@ -6,15 +6,13 @@
 		name: 'Sample Module',
 		file: 'content/javascript/argos-sample.js',
 		isDebug: true,
-		fileIncludes: [
-                {
-                    text: 'ApplicationModule.js',
-                    path: '../src/'
-                },
-                {
-                    text: 'List.js',
-                    path: '../src/views/TicketActivity'
-                }]
+		fileIncludes: [{
+            text: 'ApplicationModule.js',
+            path: '../src/'
+        },{
+            text: 'List.js',
+            path: '../src/views/TicketActivity/'
+        }]
 	}],
 	resources: [{
 		src: '../content',
