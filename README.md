@@ -80,11 +80,12 @@ This sample module was designed to show how you can add customizations to an exi
 3.	Copy the entire contents of the module's deploy folder to the server folder where argos-saleslogix has been deployed (Likely a virtual directory named SlxMobile).
 4.	Add references to this module to the index.html and index-nocache.html files, right before the application is created and initialized.
 
-        // Add this line if you have custom CSS 
-        // <link type="text/css" rel="stylesheet" href="content/css/argos-sample.css" /> 
+        <link type="text/css" rel="stylesheet" href="content/css/sample.css" /> 
         <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
         <script type="text/javascript" src="configuration/sample/production.js"></script>
-
+	
+	//Add the above lines right before the following initialization code
+	
         <script type="text/javascript">
         Ext.onReady(function() {
             var application = new Mobile.SalesLogix.Application();
