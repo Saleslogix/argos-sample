@@ -7,12 +7,30 @@
 		file: 'content/javascript/argos-sample.js',
 		isDebug: true,
 		fileIncludes: [{
-            text: 'ApplicationModule.js',
-            path: '../src/'
-        },{
-            text: 'List.js',
-            path: '../src/views/TicketActivity/'
-        }]
+            	text: 'ApplicationModule.js',
+            	path: '../src/'
+               	},
+               	{
+            		text: 'List.js',
+            		path: '../src/views/TicketActivity/'
+               	},
+	       	{
+			text: 'GroupList.js',
+			path: '../src/views/Account/'
+	       	},
+			{
+				text: 'GroupList.js',
+				path: '../src/views/Contact/'
+			},
+			{
+				text: 'GroupsList.js',
+				path: '../src/views/'
+			},
+			{
+				text: 'GoogleMap.js',
+				path: '../src/views/'
+			}
+		]
 	}],
 	resources: [{
 		src: '../content',
