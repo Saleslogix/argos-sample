@@ -1,0 +1,9 @@
+{
+    "name": "sample",
+    "displayName": "Sample Customizations",
+    "description": "A sample module implementation that shows how to customize the Sage SalesLogix Mobile client.",
+    "majorVersion": 1,
+    "minorVersion": 1,
+    "buildNumber": 0,
+    "targetProduct": "saleslogix"
+}
