@@ -41,7 +41,7 @@ This sample module was designed to show how you can add customizations to an exi
         ...\mobile\products\argos-sample
 
 ### Setup and run the application in "debug" mode
-1.	Follow the instructions for running the argos-saleslogix project in debug mode in that project's README
+1.	Follow the instructions for running the argos-saleslogix project in debug mode in that project's README.
 2.  Make a copy of the argos-saleslogix index-dev.html file and name it index-dev-sample.html.
 3.  Add the following lines to index-dev-sample.html. Note the relative paths pointing to the argos-sample folder. An example of this file is included with this project.
 
