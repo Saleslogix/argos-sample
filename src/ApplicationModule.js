@@ -74,7 +74,7 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                 where: 'after',
                 value: {
                     id: 'customButton',
-                    icon: 'content/images/icons/Hello_World_24.png',
+                    icon: '../argos-sample/content/images/icons/Hello_World_24.png',
                     action: 'showHelloWorld',
                     security: this.insertSecurity || this.editSecurity
                 }
@@ -88,7 +88,7 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                 value: {
                     value: this.helloWorldValueText,
                     label: this.helloWorldText,
-                    icon: 'content/images/icons/Hello_World_24.png',
+                    icon: '../argos-sample/content/images/icons/Hello_World_24.png',
                     action: 'showHelloWorld'
                 }
             });
