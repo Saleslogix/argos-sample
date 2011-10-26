@@ -14,10 +14,18 @@
  */
 (function() {
 
-define('Mobile/Sample/ApplicationModule', ['Mobile/SalesLogix/ApplicationModule'], function() {
+var imports = [
+    'Sage/Platform/Mobile/ApplicationModule',
+    'Mobile/Sample/Views/GroupsList',
+    'Mobile/Sample/Views/Account/GroupsList',
+    'Mobile/Sample/Views/Contact/GroupsList',
+    'Mobile/Sample/Views/GoogleMap'
+];
 
-    return dojo.declare('Mobile.Sample.ApplicationModule', [Sage.Platform.Mobile.ApplicationModule], {
-       //localization strings
+define('Mobile/Sample/ApplicationModule', imports, function() {
+
+    return dojo.declare('Mobile.Sample.ApplicationModule', Sage.Platform.Mobile.ApplicationModule, {
+        //localization strings
         regionText: 'region',
         faxText: 'fax num',
         helloWorldText: 'Say Hello.',
@@ -28,13 +36,11 @@ define('Mobile/Sample/ApplicationModule', ['Mobile/SalesLogix/ApplicationModule'
             this.inherited(arguments);
 
            //Register views for group support
-            /*
             this.registerView(new Mobile.Sample.Views.GroupsList());
             this.registerView(new Mobile.Sample.Views.Account.GroupList());
             this.registerView(new Mobile.Sample.Views.Contact.GroupList());
            //Register custom Google Map view
             this.registerView(new Mobile.Sample.Views.GoogleMap());
-            */
         },
         loadCustomizations: function() {
             this.inherited(arguments);
@@ -57,6 +63,21 @@ define('Mobile/Sample/ApplicationModule', ['Mobile/SalesLogix/ApplicationModule'
             this.registerTicketCustomizations();
         },
         registerAccountCustomizations: function() {
+
+            // Add a toolbar item to Account Detail
+            // note tools are float:right
+            this.registerCustomization('detail/tools', 'account_detail', {
+                at: function(tool){
+                    return tool.id === 'edit'
+                },
+                type: 'insert',
+                where: 'after',
+                value: {
+                    id: 'hello',
+                    action: 'showHelloWorld',
+                    security: this.insertSecurity || this.editSecurity
+                }
+            });
 
             //Add a quick action to Account Detail
             this.registerCustomization('detail', 'account_detail', {
@@ -104,7 +125,7 @@ define('Mobile/Sample/ApplicationModule', ['Mobile/SalesLogix/ApplicationModule'
                         //{0} = value
                         //{1} = Field.name
                         //{2} = Field.label
-                        message: "'{0}' is an invalid value for field '{2}'."
+                        message: "'${0}' is an invalid value for field '${2}'."
                     }
                 }
             });
@@ -198,7 +219,7 @@ define('Mobile/Sample/ApplicationModule', ['Mobile/SalesLogix/ApplicationModule'
 
                     var request = new Sage.SData.Client.SDataSingleResourceRequest(this.getService())
                         .setResourceKind('accounts')
-                        .setResourceSelector(dojo.string.substiture("'${0}'", [parentId]))
+                        .setResourceSelector(dojo.string.substitute("'${0}'", [parentId]))
                         .setQueryArg('select', 'AccountName');
 
                     request.allowCacheUse = true;
@@ -221,18 +242,18 @@ define('Mobile/Sample/ApplicationModule', ['Mobile/SalesLogix/ApplicationModule'
 
                 },
                 updateParentAccountDisplay: function() {
-                    var rowEl = this.el.child('[data-property="ParentAccount"]'),
-                        contentEl = rowEl && rowEl.child('span');
+                    var rowNode = dojo.query('[data-property="ParentAccount"]', this.domNode)[0],
+                        contentNode = rowNode && dojo.query('span', rowNode)[0];
 
-                    if (rowEl)
-                        rowEl.removeClass('content-loading');
+                    if (rowNode)
+                        dojo.removeClass(rowNode, 'content-loading');
 
-                    if (contentEl)
-                        contentEl.update((this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '');
+                    if (contentNode)
+                        contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
                 },
                 processEntry: function(entry) {
-                    this.inherited(arguments);
-
+                    //this.inherited(arguments);
+                    Mobile.SalesLogix.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
                     if (entry && entry['ParentId'])
                     {
                         this.requestParentAccount(entry['ParentId']);
