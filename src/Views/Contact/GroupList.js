@@ -11,20 +11,19 @@
 /// <reference path="../../../../../argos-sdk/src/View.js"/>
 /// <reference path="../../../../../argos-sdk/src/List.js"/>
 
-Ext.namespace("Mobile.Sample.Contact");
+define('Mobile/Sample/Views/Contact/GroupList', ['Sage/Platform/Mobile/List'], function() {
 
-(function() {
-    Mobile.Sample.Contact.GroupList = Ext.extend(Sage.Platform.Mobile.List, {
+    return dojo.declare('Mobile.Sample.Views.Contact.GroupList', [Sage.Platform.Mobile.List], {
         //Templates
-        contentTemplate: new Simplate([
+        itemTemplate: new Simplate([
             '<h3>{%: $.NAMELF %}</h3>',
             '<h4>{%: $.ACCOUNT %}</h4>'
         ]),
         //OOTB itemTemplate assumes $key and $descriptor, but that's not the case with the groups endpoint.
-        itemTemplate: new Simplate([
+        rowTemplate: new Simplate([
             '<li data-action="activateEntry" data-key="{%= $.CONTACTID %}" data-descriptor="{%: $.$descriptor %}">',
             '<div data-action="selectEntry" class="list-item-selector"></div>',
-            '{%! $$.contentTemplate %}',
+            '{%! $$.itemTemplate %}',
             '</li>'
         ]),
 
@@ -47,21 +46,24 @@ Ext.namespace("Mobile.Sample.Contact");
         resourceKind: 'groups/$queries/execute',
 
         formatSearchQuery: function(query) {
-            return String.format('NAMELF like "{0}%"', this.escapeSearchQuery(query.toUpperCase()));
+            return dojo.string.substitute('NAMELF like "${0}%"', [this.escapeSearchQuery(query.toUpperCase())]);
         },
         init: function() {
-            Mobile.Sample.Contact.GroupList.superclass.init.apply(this, arguments);
+            this.inherited(arguments);
+        },
+        createToolLayout: function(){
             // Empty the toolbar. This is a read-only view.
-            this.tools.tbar = [];
+            return this.tools || (this.tools = {
+                'tbar': []
+            });
         },
         show: function(options) {
-            this.setTitle(options && options.title || this.title);
-
-            Mobile.Sample.Contact.GroupList.superclass.show.apply(this, arguments);
+            this.set('title',(options && options.title || this.title));
+            this.inherited(arguments);
         },
         //This is a special system endpoint, not part of the standard dynamic entity feeds.
         createRequest: function() {
-            var request = Mobile.Sample.Contact.GroupList.superclass.createRequest.call(this)
+            var request = Mobile.Sample.Views.Contact.GroupList.superclass.createRequest.call(this)
                 .setContractName('system');
             request.setQueryArg('_groupId', this.options._groupId);
             return request;
@@ -86,7 +88,7 @@ Ext.namespace("Mobile.Sample.Contact");
                 return false;
             }
             else
-                return Mobile.Sample.Contact.GroupList.superclass.refreshRequiredFor.call(this, options);
+                return Mobile.Sample.Views.Contact.GroupList.superclass.refreshRequiredFor.call(this, options);
         }
     });
-})();
+});

@@ -17,8 +17,8 @@
 var imports = [
     'Sage/Platform/Mobile/ApplicationModule',
     'Mobile/Sample/Views/GroupsList',
-    'Mobile/Sample/Views/Account/GroupsList',
-    'Mobile/Sample/Views/Contact/GroupsList',
+    'Mobile/Sample/Views/Account/GroupList',
+    'Mobile/Sample/Views/Contact/GroupList',
     'Mobile/Sample/Views/GoogleMap'
 ];
 
