@@ -64,7 +64,7 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
         },
         registerAccountCustomizations: function() {
 
-            // Add a toolbar item to Account Detail
+            // Add a custom toolbar item to Account Detail
             // note tools are float:right
             this.registerCustomization('detail/tools', 'account_detail', {
                 at: function(tool){
@@ -73,7 +73,8 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                 type: 'insert',
                 where: 'after',
                 value: {
-                    id: 'hello',
+                    id: 'customButton',
+                    icon: 'content/images/icons/Hello_World_24.png',
                     action: 'showHelloWorld',
                     security: this.insertSecurity || this.editSecurity
                 }
@@ -200,19 +201,6 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                 showHelloWorld: function() {
                     alert(this.helloWorldAlertText);
                 },
-
-                //Add a custom toolbar button to the Account Detail view.
-                /* todo: change to new tbar customize
-                init: function() {
-                    this.inherit(arguments);
-                    this.tools.tbar.push({
-                        id: 'customButton',
-                        icon: 'content/images/icons/Hello_World_24.png',
-                        action: 'showHelloWorld'
-                    });
-                },
-                */
-
 
                 requestParentAccount: function(parentId)
                 {
