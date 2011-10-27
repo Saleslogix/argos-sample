@@ -80,6 +80,22 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                 }
             });
 
+            // Here we add a tool with its own custom security
+            // Admin user can access everything, others have to match the security string
+            // from the securedActions for user role returned via sdata after login
+            // this one is shown on Contact List
+            this.registerCustomization('list/tools', 'contact_list', {
+                at: function(tool) { return tool.id === 'new' },
+                type: 'insert',
+                where: 'after',
+                value: {
+                    security: 'Entities/Contact/CustomAction',
+                    id: 'custom-action',
+                    icon: 'content/images/icons/Contacts_24x24.png',
+                    fn: function() { alert('We have clearance to this Secured Action!'); }
+                }
+            });
+
             //Add a quick action to Account Detail
             this.registerCustomization('detail', 'account_detail', {
                 at: function(row) { return row.action == 'addNote'; },
