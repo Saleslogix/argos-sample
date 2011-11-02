@@ -6,7 +6,6 @@
 This sample module was designed to show how you can add customizations to an existing project based on the Argos SDK. This module was designed to supplement the [argos-saleslogix][argos-saleslogix] project.
 
 ### Included Examples
-*  Creating and registering a custom list view (Ticket Activities)
 *  Adding a Quick Action to an existing view (Account Detail)
 *  Add a field to existing detail and edit views (Account Detail/Edit)
 *  Change a label on an existing view (Account Detail)
