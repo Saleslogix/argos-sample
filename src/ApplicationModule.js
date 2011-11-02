@@ -12,17 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(function() {
-
-var imports = [
+define('Mobile/Sample/ApplicationModule', [
     'Sage/Platform/Mobile/ApplicationModule',
     'Mobile/Sample/Views/GroupsList',
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
     'Mobile/Sample/Views/GoogleMap'
-];
-
-define('Mobile/Sample/ApplicationModule', imports, function() {
+], function() {
 
     return dojo.declare('Mobile.Sample.ApplicationModule', Sage.Platform.Mobile.ApplicationModule, {
         //localization strings
@@ -60,23 +56,20 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
 
             this.registerAccountCustomizations();
             this.registerContactCustomizations();
-            this.registerTicketCustomizations();
         },
         registerAccountCustomizations: function() {
 
-            // Add a custom toolbar item to Account Detail
-            // note tools are float:right
+            // Add a custom toolbar item to Account Detail that uses
+            // the associated Edit Views "Update" security role
             this.registerCustomization('detail/tools', 'account_detail', {
-                at: function(tool){
-                    return tool.id === 'edit'
-                },
+                at: function(tool){ return tool.id === 'edit'; },
                 type: 'insert',
                 where: 'after',
                 value: {
                     id: 'customButton',
                     icon: '../argos-sample/content/images/icons/Hello_World_24.png',
                     action: 'showHelloWorld',
-                    security: this.insertSecurity || this.editSecurity
+                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
                 }
             });
 
@@ -240,7 +233,6 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                         contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
                 },
                 processEntry: function(entry) {
-                    //this.inherited(arguments);
                     Mobile.SalesLogix.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
                     if (entry && entry['ParentId'])
                     {
@@ -274,7 +266,8 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
             });
 
             dojo.extend(Mobile.SalesLogix.Views.Account.List, {
-                hashTagQueries: dojo.mixin(Mobile.SalesLogix.Views.Opportunity.List.prototype.hashTagQueries || {}, {
+                // Add a custom #hash tag search filter to the Account List search widget
+                hashTagQueries: dojo.mixin(this.hashTagQueries || {}, {
                     'mine': function() {
                         return dojo.string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
                     }
@@ -294,23 +287,6 @@ define('Mobile/Sample/ApplicationModule', imports, function() {
                     '<h4>{%: Mobile.SalesLogix.Format.phone($.WorkPhone, false) %}</h4>'
                 ])
             });
-        },
-        registerTicketCustomizations: function() {
-            //Add a related view for TicketActivities.
-            this.registerCustomization('detail', 'ticket_detail', {
-                at: function(row) { return row.view === 'activity_related' },
-                type: 'insert',
-                value: {
-                    label: 'Ticket Activities',
-                    icon: 'content/images/icons/Ticket_Activities_24x24.png',
-                    view: 'ticketActivity_related',
-                    //This shows how to access the current SData Feed Entry
-                    where: function(entry) {
-                        return dojo.string.substitute('Ticket.id eq "${0}"', [entry['$key']])
-                    }
-                }
-            });
         }
     });
 });
-})();
