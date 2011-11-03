@@ -56,6 +56,18 @@ define('Mobile/Sample/ApplicationModule', [
 
             this.registerAccountCustomizations();
             this.registerContactCustomizations();
+            this.registerOpportunityCustomizations();
+        },
+        registerOpportunityCustomizations: function(){
+            // Adds an additional #hash tag query to the Opportunity List View Search
+            // Hash tags can be combined (uses AND logic) so try out:
+            // #open #500k
+            // to see all Open Opportunities worth $500k or more
+            this.registerCustomization('list/hashes', 'opportunity_list', {
+                hashTagQueries: {
+                    '500k': 'SalesPotential gt "500000"'
+                }
+            });
         },
         registerAccountCustomizations: function() {
 
@@ -265,13 +277,13 @@ define('Mobile/Sample/ApplicationModule', [
                 ])
             });
 
-            dojo.extend(Mobile.SalesLogix.Views.Account.List, {
-                // Add a custom #hash tag search filter to the Account List search widget
-                hashTagQueries: dojo.mixin(this.hashTagQueries || {}, {
+            // Adds a #hash tag query to the Account List View Search
+            this.registerCustomization('list/hashes', 'account_list', {
+                hashTagQueries: {
                     'mine': function() {
                         return dojo.string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
                     }
-                })
+                }
             });
         },
         registerContactCustomizations: function() {
