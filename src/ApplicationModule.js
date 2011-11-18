@@ -59,48 +59,46 @@ define('Mobile/Sample/ApplicationModule', [
             this.registerOpportunityCustomizations();
         },
         registerOpportunityCustomizations: function(){
-            // Adds an additional #hash tag queries to the Opportunity List View Search
+            // Add the hash tag "g500k" to see all Opportunities worth more than $500k
             // Hash tags can be combined (uses AND logic) so try out:
             // #open #g500k
-            // to see all Open Opportunities worth $500k or more
-            this.registerCustomization('list/hashes', 'opportunity_list', {
-                // since we are inserting at the end, always return false for at()
-                at: function(hash, module){return false;},
-                // or() is a final at() check that happens at the end
-                // for hashes you can insert into
-                // hashTagQueries or hashTagQueriesText (localized)
-                or: function(module){ return module === 'hashTagQueries';},
+            // ... to see all Open Opportunities worth $500k or more
+            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
+                at: true, // insert anywhere (hash tag queries are not ordered)
                 type: 'insert',
-                // you may pass multiple hash tags on insert only
                 value: {
-                    'g500k': 'SalesPotential gt "500000"',
-                    'l500k': 'SalesPotential lt "500000"'
+                    tag: 'g500k',
+                    query: 'SalesPotential gt "500000"'
+                }
+            });
+            
+            // Add the hash tag "g500k" to see all Opportunities worth more than $500k
+            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
+                at: true, // insert anywhere (hash tag queries are not ordered)
+                type: 'insert',
+                value: {
+                    tag: 'l500k',
+                    query: 'SalesPotential lt "500000"'
                 }
             });
 
             // Remove the hash tag "won" from Opportunity List View Search
             // so if a user types #won it will perform a normal search for "#won"
-            this.registerCustomization('list/hashes', 'opportunity_list', {
+            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
                 // since we are looking for a particular key use at()
                 // and test for the hash[key] existence
-                at: function(hash, module){
-                    return (module === 'hashTagQueries' && !!hash['won']);
-                },
+                at: function(row) { return row['key'] == 'won'; },
                 type: 'remove'
             });
 
             // Modify the hash tag "lost" from Opportunity List View Search
             // to mean Type =  "Product"
-            this.registerCustomization('list/hashes', 'opportunity_list', {
+            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
                 // use at() to select our hash key
-                at: function(hash, module){
-                    return (module === 'hashTagQueries' && !!hash['lost']);
-                },
+                at: function(row) { return row['key'] == 'lost'; },
                 type: 'modify',
-                // when modifying a value, make sure you pass an entire new hash
-                // in the format hash:query
                 value: {
-                    'lost': 'Type eq "Product"'
+                    query: 'Type eq "Product"'
                 }
             });
         },
@@ -315,12 +313,12 @@ define('Mobile/Sample/ApplicationModule', [
             // Adds a #hash tag query to the Account List View Search
             // Shows you can pass a dynamic query to a hash tag
             // in this case it uses the current users ID/key
-            this.registerCustomization('list/hashes', 'account_list', {
-                at: function(hash, module){return false;},
-                or: function(module){ return module === 'hashTagQueries';},
+            this.registerCustomization('list/hashTagQueries', 'account_list', {
+                at: true,
                 type: 'insert',
                 value: {
-                    'mine': function() {
+                    tag: 'mine',
+                    query: function() {
                         return dojo.string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
                     }
                 }
