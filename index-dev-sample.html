@@ -63,20 +63,26 @@
     </script>
 
     <script type="text/javascript">
-    Mobile = {};
-    
-    require(['configuration/sample/development', 'Mobile/SalesLogix/Application'], function(configuration) {
+    (function() {
+        var application = 'Mobile/SalesLogix/Application',
+            configuration = [
+                'configuration/sample/development'
+            ];
+        require([application].concat(configuration), function(application, configuration) {
+            var localization = [
+                'localization/en',
+                'localization/saleslogix/en',
+                'localization/sample/en'
+            ];
+            require(localization.concat('dojo/domReady!'), function() {
+                var instance = new application(configuration);
 
-        require(['localization/sample/en'], function() {
-            var application = new Mobile.SalesLogix.Application(configuration);
-
-            application.activate();
-            application.init();
-            application.run();
+                instance.activate();
+                instance.init();
+                instance.run();
+            });
         });
-        
-    });
-        
+    })();
     </script>
 </head>
 <body>
