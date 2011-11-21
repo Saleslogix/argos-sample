@@ -1,0 +1,19 @@
+{
+	"projectName": "SalesLogix Mobile Sample Module",
+	"licenseText": "",
+	"deployDir": "deploy/",
+	"pkgs": [],
+	"resources": [{
+		"src": "../content",
+		"dest": "content",
+		"filters": ".*(\\.css|\\.jpg|\\.png|\\.gif)"
+	},{
+		"src": "../configuration",
+		"dest": "configuration/sample",
+		"filters": ".*\\.js"
+	},{
+		"src": "../localization",
+		"dest": "localization/sample",
+		"filters": ".*\\.js"
+	}]
+}

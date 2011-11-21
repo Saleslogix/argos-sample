@@ -1,48 +1,51 @@
 {
-	projectName: 'Sample Module',
-	licenseText: '',
-	deployDir: 'deploy/',
-	pkgs: [{
-		name: 'Sample Module',
-		file: 'content/javascript/argos-sample.js',
-		isDebug: true,
-		fileIncludes: [{
-            	text: 'ApplicationModule.js',
-            	path: '../src/'
-               	},
-               	{
-            		text: 'List.js',
-            		path: '../src/views/TicketActivity/'
-               	},
-	       	{
-			text: 'GroupList.js',
-			path: '../src/views/Account/'
-	       	},
-			{
-				text: 'GroupList.js',
-				path: '../src/views/Contact/'
-			},
-			{
-				text: 'GroupsList.js',
-				path: '../src/views/'
-			},
-			{
-				text: 'GoogleMap.js',
-				path: '../src/views/'
-			}
-		]
-	}],
-	resources: [{
-		src: '../content',
-		dest: 'content',
-		filters: ".*(\\.css|\\.jpg|\\.png|\\.gif)"
-	},{
-		src: '../configuration',
-		dest: 'configuration/sample',
-		filters: ".*\\.js"
-	},{
-		src: '../localization',
-		dest: 'localization/sample',
-		filters: ".*\\.js"
-	}]
+  "projectName": "SalesLogix Mobile Sample Module",
+  "licenseText": "",
+  "deployDir": "deploy/",
+  "pkgs": [
+    {
+      "name": "SalesLogix Mobile Sample Module",
+      "file": "content/javascript/argos-sample.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "GroupsList.js",
+          "path": "../src/Views"
+        },
+        {
+          "text": "GroupList.js",
+          "path": "../src/Views/Account"
+        },
+        {
+          "text": "GroupList.js",
+          "path": "../src/Views/Contact"
+        },
+        {
+          "text": "GoogleMap.js",
+          "path": "../src/Views"
+        },
+        {
+          "text": "ApplicationModule.js",
+          "path": "../src"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "src": "../content",
+      "dest": "content",
+      "filters": ".*(\\.css|\\.jpg|\\.png|\\.gif)"
+    },
+    {
+      "src": "../configuration",
+      "dest": "configuration/sample",
+      "filters": ".*\\.js"
+    },
+    {
+      "src": "../localization",
+      "dest": "localization/sample",
+      "filters": ".*\\.js"
+    }
+  ]
 }
