@@ -370,29 +370,21 @@ define('Mobile/Sample/ApplicationModule', [
             });
 
             // Display Signature in place of Notes on Lead Detail view
-            // ** VERY contrived (fugly) solution, needs possibly SDK-level adaptations
-            var canvasNodeName   = 'sampleSignature',
-                canvasTemplate   = '<canvas dojo-attach-point="${0}" width="180" height="50" signature="{%= $.Notes %}">',
-                sampleSignature  = '[[[80,35],[80,34],[69,28],[56,28],[46,36],[46,38],[45,39],[49,53],[50,55],[62,60],[75,66],[76,67],[76,68],[78,79],[76,93],[71,106],[63,118],[49,121],[46,121],[33,114],[31,113],[31,111],[30,110],[31,102],[35,101],[47,99],[56,101],[63,121]],[[98,83],[97,83],[97,85],[96,86],[96,87],[95,87],[94,100],[98,114],[99,114],[99,115],[100,115],[100,116],[106,115],[106,114],[107,113],[107,111],[108,111],[108,108],[109,108],[109,107],[110,106],[110,105],[111,104],[111,103],[118,90],[119,89],[120,89],[120,88],[121,88],[122,87],[123,87],[123,86],[124,86],[120,89],[115,103],[118,113],[119,114],[119,115],[120,115],[120,117],[121,117],[121,118],[122,118],[122,119],[128,118],[128,117],[129,117],[131,115],[131,113],[132,113],[131,99],[131,97],[130,96],[129,96],[129,94],[128,93],[127,93],[127,92],[122,89],[129,101],[136,114],[136,116],[137,117],[138,131],[138,145],[137,151],[137,152],[136,153],[136,154],[135,155],[134,155],[134,156],[121,158],[110,155],[109,154],[108,154],[107,153],[106,153],[106,152],[104,149],[106,141],[119,139],[130,142],[140,151],[152,159],[153,160],[154,160],[162,160]],[[100,63],[101,67],[102,68],[103,69]]]',
-                signatureOptions = {penColor: 'lime', lineWidth: 1};
             this.registerCustomization('detail', 'lead_detail', {
                 at: function(row) { return row.name == 'Notes'; },
                 type: 'modify',
-                /* or maybe: generate image (base64), embed pixel data/generate from vector returning <img /> */
                 value: {
                     label: signatureText,
                     property: 'Signature',
-                    tpl: new Simplate(
-                        dojo.string.substitute(canvasTemplate, [canvasNodeName])
-                        // for demo use below to see sampleSignature defined above, instead of $.Notes
-                        //dojo.string.substitute('<canvas dojo-attach-point="${0}" width="180" height="50" signature="${1}">', [canvasNodeName, sampleSignature])
-                    ),
-                    // wait fraction of a second for element instantiation form tpl above
-                    action: function() {
-                        setTimeout( function () {
-                            var canvas = dojo.query(dojo.string.substitute('[dojo-attach-point="${0}"]', [canvasNodeName]))[0];
-                            App.views.signature_edit.draw(canvas, canvas.getAttribute('signature'), signatureOptions);
-                        }, 100);
+                    renderer: function(entry) {
+                        var tmpCanvas = document.createElement('canvas'),
+                            template = '<img src="${0}" width="${1}" height="${2}" />',
+                            signatureOptions = {penColor: 'blue', lineWidth: 1};
+                        tmpCanvas.width  = 180;
+                        tmpCanvas.height =  50;
+                        App.views.signature_edit.draw(tmpCanvas, entry.Notes, signatureOptions);
+                        // currently toDataURL an issue on Android browser. Need to manually encode to jpg
+                        return dojo.string.substitute(template, [tmpCanvas.toDataURL('image/png'), tmpCanvas.width, tmpCanvas.height]);
                     }
                 }
             });
