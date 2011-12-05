@@ -377,14 +377,13 @@ define('Mobile/Sample/ApplicationModule', [
                     label: signatureText,
                     property: 'Signature',
                     renderer: function(entry) {
-                        var tmpCanvas = document.createElement('canvas'),
-                            template = '<img src="${0}" width="${1}" height="${2}" />',
-                            signatureOptions = {penColor: 'blue', lineWidth: 1};
-                        tmpCanvas.width  = 180;
-                        tmpCanvas.height =  50;
-                        App.views.signature_edit.draw(tmpCanvas, entry.Notes, signatureOptions);
-                        // currently toDataURL an issue on Android browser. Need to manually encode to jpg
-                        return dojo.string.substitute(template, [tmpCanvas.toDataURL('image/png'), tmpCanvas.width, tmpCanvas.height]);
+                        var signatureOptions = {
+                            penColor: 'blue',
+                            lineWidth: 1,
+                            width: 180,
+                            height: 50
+                        };
+                        return App.views.signature_edit.toHTMLImage(entry.Notes, signatureOptions);
                     }
                 }
             });
