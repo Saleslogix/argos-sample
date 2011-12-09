@@ -375,16 +375,17 @@ define('Mobile/Sample/ApplicationModule', [
                 type: 'modify',
                 value: {
                     label: signatureText,
-                    property: 'Signature',
-                    renderer: function(entry) {
-                        var signatureOptions = {
+                    property: 'Notes',
+                    renderer: Sage.Platform.Mobile.Format.imageFromVector.bindDelegate(
+                        this,
+                        {
                             penColor: 'blue',
-                            lineWidth: 1,
-                            width: 180,
-                            height: 50
-                        };
-                        return App.views.signature_edit.toHTMLImage(entry.Notes, signatureOptions);
-                    }
+                            lineWidth:     1,
+                            width:       180,
+                            height:       50
+                        },
+                        true // return HTML <img>
+                    )
                 }
             });
         }
