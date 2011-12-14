@@ -48,7 +48,7 @@ This sample module was designed to show how you can add customizations to an exi
 
 3.  Edit following lines to index-dev-sample.html. Note the relative paths pointing to the argos-sample folder. An example of this file is included with this project.
 
-
+```
     require({
             baseUrl: "./",
             packages: [
@@ -57,7 +57,7 @@ This sample module was designed to show how you can add customizations to an exi
             { name: 'Sage/Platform/Mobile', location: '../../argos-sdk/src' },
             { name: 'Mobile/SalesLogix', location: 'src' },
             { name: 'Mobile/Sample', location: '../argos-sample/src' }, // <-- Namespace and src folder path
-            { name: 'configuration/sample', location: '../argos-sample/configuration' }, // <-- configurtion/name, config folder path
+            { name: 'configuration/sample', location: '../argos-sample/configuration' }, // <-- configuration/name, config folder path
             { name: 'localization/sample', location: '../argos-sample/localization' } // <-- localization/name and locale folder path
             ]
     });
@@ -72,7 +72,7 @@ This sample module was designed to show how you can add customizations to an exi
             'localization/saleslogix/en',
             'localization/sample/en' // <-- locale file (no extension)
         ];
-
+```
 
 4.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
 
@@ -82,7 +82,7 @@ This sample module was designed to show how you can add customizations to an exi
 
 #### Before You Start
 
-You may place information about your customization module in the `module-info.json` file in the root directory. This information will be displayed in Application Architect for easy identification and versioning.
+You may place information about your customization module in the `module-info.json` file in the root directory. This information will be displayed in Application Architect (in the next release) for easy identification and versioning.
 
 #### Requirements
 *	Windows
@@ -107,10 +107,11 @@ You may place information about your customization module in the `module-info.js
 
 3. Edit it to point to your minified script and stylesheet (following the `deploy` folder layout):
 
-
+```
     <!-- Sample -->
     <link type="text/css" rel="stylesheet" href="content/css/sample.css" />
     <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
+```    
 
 4. At this point this guide will continue assuming you are manually deploying, this section will change when AA supports Mobile Deployment.
 
@@ -118,9 +119,10 @@ You may place information about your customization module in the `module-info.js
 
 6. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier) into each file at the designated modules marker:
 
-
+```
     <!-- Modules -->
     <!--{{modules}}-->
+```
 
 To:
 
