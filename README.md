@@ -26,11 +26,13 @@ This sample module was designed to show how you can add customizations to an exi
 *	A web server
 
 ### Clone repository
-1.	Open a command prompt.
-2.	change to the base directory where you cloned [Argos SDK][argos-sdk], eg:
+1\.	Open a command prompt.
+
+2\.	change to the base directory where you cloned [Argos SDK][argos-sdk], eg:
 
 		cd \projects\sage\mobile
-3.	Execute the following commands (clone command shown with READ-ONLY URL; if you have commit rights, use the appropriate Read+Write URL).
+		
+3\.	Execute the following commands (clone command shown with READ-ONLY URL; if you have commit rights, use the appropriate Read+Write URL).
 
 		cd products
 		git clone git://github.com/SageSalesLogix/argos-sample.git
@@ -42,11 +44,11 @@ This sample module was designed to show how you can add customizations to an exi
 
 ### Setup and run the application in "debug" mode
 
-1.	Follow the instructions for running the argos-saleslogix project in debug mode in that project's README.
+1\.  Follow the instructions for running the argos-saleslogix project in debug mode in that project's README.
 
-2.  Make a copy of the argos-saleslogix index-dev.html file and name it index-dev-sample.html.
+2\.  Make a copy of the argos-saleslogix index-dev.html file and name it index-dev-sample.html.
 
-3.  Edit following lines to index-dev-sample.html. Note the relative paths pointing to the argos-sample folder. An example of this file is included with this project.
+3\.  Edit following lines to index-dev-sample.html. Note the relative paths pointing to the argos-sample folder. An example of this file is included with this project.
 
 ```
     require({
@@ -74,7 +76,7 @@ This sample module was designed to show how you can add customizations to an exi
         ];
 ```
 
-4.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
+4\.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
 
 		http://localhost/mobile/products/argos-saleslogix/index-dev-sample.html
 
@@ -88,24 +90,27 @@ You may place information about your customization module in the `module-info.js
 *	Windows
 
 #### Steps
-1.	Save this [gist](https://gist.github.com/815451) as `build-module.cmd` to the directory where you cloned [Argos SDK][argos-sdk] (The same folder where you created the Products folder).
-2.	Open a command prompt and execute the following, changing paths as appropriate, eg:
+
+1\.	Save this [gist](https://gist.github.com/815451) as `build-module.cmd` to the directory where you cloned [Argos SDK][argos-sdk] (The same folder where you created the Products folder).
+
+2\.	Open a command prompt and execute the following, changing paths as appropriate, eg:
 
         cd \projects\sage\mobile
         build-module sample
 
-3.	The deployed module will be in a `deploy` folder in the directory where you cloned [argos-sample][argos-sample].
+3\.	The deployed module will be in a `deploy` folder in the directory where you cloned [argos-sample][argos-sample].
 
 ### Deploying
 
 #### Setup
-1.	Open the deploy folder for the product, eg:
+
+1\.	Open the deploy folder for the product, eg:
 
 		mobile\products\argos-sample\deploy
 
-2. Then open the `module-fragment.html` file. This file will be placed into all the `index` files.
+2\. Then open the `module-fragment.html` file. This file will be placed into all the `index` files.
 
-3. Edit it to point to your minified script and stylesheet (following the `deploy` folder layout):
+3\. Edit it to point to your minified script and stylesheet (following the `deploy` folder layout):
 
 ```
     <!-- Sample -->
@@ -113,11 +118,11 @@ You may place information about your customization module in the `module-info.js
     <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
 ```    
 
-4. At this point this guide will continue assuming you are manually deploying, this section will change when AA supports Mobile Deployment.
+4\. At this point this guide will continue assuming you are manually deploying, this section will change when AA supports Mobile Deployment.
 
-5. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
+5\. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
 
-6. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier) into each file at the designated modules marker:
+6\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier) into each file at the designated modules marker:
 
 ```
     <!-- Modules -->
@@ -131,6 +136,37 @@ To:
     <link type="text/css" rel="stylesheet" href="content/css/sample.css" />
     <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
 
+7\. Lastly we need to add the modules configuration and the localization by editing the following lines:
+
+```
+    (function() {
+        var application = 'Mobile/SalesLogix/Application',
+            configuration = [
+                'configuration/production'
+           ];
+        require([application].concat(configuration), function(application, configuration) {
+            var localization = [
+                'localization/en',
+                'localization/saleslogix/en'
+            ];
+```
+
+To:
+
+```
+    (function() {
+        var application = 'Mobile/SalesLogix/Application',
+            configuration = [
+                'configuration/production',
+                'configuration/sample/production'
+           ];
+        require([application].concat(configuration), function(application, configuration) {
+            var localization = [
+                'localization/en',
+                'localization/saleslogix/en',
+                'localization/sample/en'
+            ];
+```
 
 #### Finished
 
