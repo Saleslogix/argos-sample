@@ -108,7 +108,7 @@ You may place information about your customization module in the `module-info.js
 
 		mobile\products\argos-sample\deploy
 
-2\. Then open the `module-fragment.html` file. This file will be placed into all the `index` files.
+2\. Then open the `module-fragment.html` file. This file will be placed into all the `index` files (either manually via copy pasting the lines or automatically through AA).
 
 3\. Edit it to point to your minified script and stylesheet (following the `deploy` folder layout):
 
@@ -122,7 +122,7 @@ You may place information about your customization module in the `module-info.js
 
 5\. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
 
-6\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier) into each file at the designated modules marker:
+6\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier, this file is not copied into the deploy folder so look for it in your normal dev directory) into each file at the designated modules marker:
 
 ```
     <!-- Modules -->
