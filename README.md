@@ -76,7 +76,9 @@ This sample module was designed to show how you can add customizations to an exi
         ];
 ```
 
-4\.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
+4\.	If you have any additional images, icons, etc that you wish to be available during development you will need to copy them into their respective folders within argos-saleslogix. Doing this allows any relative paths to files to remain intact when your module is deployed (all folders are merged in deployment). 
+
+5\.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
 
 		http://localhost/mobile/products/argos-saleslogix/index-dev-sample.html
 
