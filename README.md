@@ -172,7 +172,7 @@ To:
 
 #### Finished
 
-The argos-sample module will now be part of the SlxMobile client.
+The argos-sample module will now be part of the Sage SalesLogix Mobile client.
 
 
 [argos-sdk]: https://github.com/Sage/argos-sdk "Argos SDK Source"
