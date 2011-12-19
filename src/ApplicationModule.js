@@ -113,7 +113,7 @@ define('Mobile/Sample/ApplicationModule', [
                 where: 'after',
                 value: {
                     id: 'customButton',
-                    icon: '../argos-sample/content/images/icons/Hello_World_24.png',
+                    icon: 'content/images/icons/Hello_World_24.png',
                     action: 'showHelloWorld',
                     security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
                 }
@@ -127,7 +127,7 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     value: this.helloWorldValueText,
                     label: this.helloWorldText,
-                    icon: '../argos-sample/content/images/icons/Hello_World_24.png',
+                    icon: 'content/images/icons/Hello_World_24.png',
                     action: 'showHelloWorld'
                 }
             });
