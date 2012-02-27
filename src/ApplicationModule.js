@@ -58,6 +58,7 @@ define('Mobile/Sample/ApplicationModule', [
             this.registerContactCustomizations();
             this.registerOpportunityCustomizations();
             this.registerLeadCustomizations();
+            this.registerErrorLogCustomizations();
         },
         registerOpportunityCustomizations: function(){
             // Add the hash tag "g500k" to see all Opportunities worth more than $500k
@@ -397,6 +398,31 @@ define('Mobile/Sample/ApplicationModule', [
                         true // return HTML <img>
                     )
                 }
+            });
+        },
+        registerErrorLogCustomizations: function(){
+            /*
+                When a server error occurs the server response is parsed and saved to localStorage (and in current session memory)
+                A user may then go to Settings -> View Error Logs and see the last 10 errors
+                The Detail view of an error log contains either an email button (mobile devices) or copy to clipboard button (desktops).
+
+                The following properties are exposed so that you may tailor as needed:
+             */
+            dojo.mixin(Sage.Platform.Mobile.ErrorManager, {
+                // number of error logs to keep on device, defaults to 10
+                errorCacheSizeMax: 15
+            });
+
+            dojo.extend(Mobile.SalesLogix.Views.ErrorLog.Detail, {
+                // for mobile devices this string will set as the To: field
+                // defaults to empty
+                defaultToAddress: 'techs@super-support.com',
+
+                // for mobile devices this string will be set as the Subject: field
+                emailSubjectText: 'SLXMobile Error Report',
+
+                // for desktops the message to display when it is copied to clipboard
+                copiedSuccessText: 'Error Report copied to clipboard'
             });
         }
     });
