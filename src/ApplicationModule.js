@@ -133,6 +133,17 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            //Add Region to the Account Detail view, right above the Type property
+            this.registerCustomization('detail', 'account_detail', {
+                at: function(row) { return row.name == 'Type'; },
+                type: 'insert',
+                where: 'before',
+                value: {
+                    name: 'Region',
+                    label: this.regionText
+                }
+            });
+
             //Add a different default value when inserting a new Account
             this.registerCustomization('edit', 'account_edit', {
                 at: function(row) { return row.name == 'WebAddress'; },
