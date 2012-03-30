@@ -1,19 +1,14 @@
-/**
- * Created by JetBrains WebStorm.
- * User: jhershauer
- * Date: 7/11/11
- * Time: 9:03 PM
- * To change this template use File | Settings | File Templates.
- */
-/// <reference path="../../../../../argos-sdk/libraries/ext/ext-core-debug.js"/>
-/// <reference path="../../../../../argos-sdk/libraries/sdata/sdata-client-debug"/>
-/// <reference path="../../../../../argos-sdk/libraries/Simplate.js"/>
-/// <reference path="../../../../../argos-sdk/src/View.js"/>
-/// <reference path="../../../../../argos-sdk/src/List.js"/>
+define('Mobile/Sample/Views/Account/GroupList', [
+    'dojo/_base/declare',
+    'dojo/string',
+    'Sage/Platform/Mobile/List'
+], function(
+    declare,
+    string,
+    List
+) {
 
-define('Mobile/Sample/Views/Account/GroupList', ['Sage/Platform/Mobile/List'], function() {
-
-    return dojo.declare('Mobile.Sample.Views.Account.GroupList', [Sage.Platform.Mobile.List], {
+    return declare('Mobile.Sample.Views.Account.GroupList', [List], {
         //Templates
         //No $key or $descriptor with groups endpoint.
         itemTemplate: new Simplate([
@@ -47,8 +42,8 @@ define('Mobile/Sample/Views/Account/GroupList', ['Sage/Platform/Mobile/List'], f
         //Note the custom resourceKind to get to the group.
         resourceKind: 'groups/$queries/execute',
 
-        formatSearchQuery: function(query) {
-            return dojo.string.substitute('ACCOUNT_UC like "${0}%"', [this.escapeSearchQuery(query.toUpperCase())]);
+        formatSearchQuery: function(searchQuery) {
+            return string.substitute('ACCOUNT_UC like "${0}%"', [this.escapeSearchQuery(searchQuery.toUpperCase())]);
         },
         init: function() {
             this.inherited(arguments);

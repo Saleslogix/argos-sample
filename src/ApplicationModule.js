@@ -13,14 +13,32 @@
  * limitations under the License.
  */
 define('Mobile/Sample/ApplicationModule', [
+    'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/string',
+    'dojo/query',
+    'dojo/dom-class',
+    'Mobile/SalesLogix/Format',
     'Sage/Platform/Mobile/ApplicationModule',
     'Mobile/Sample/Views/GroupsList',
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
     'Mobile/Sample/Views/GoogleMap'
-], function() {
+], function(
+    declare,
+    lang,
+    string,
+    query,
+    domClass,
+    format,
+    ApplicationModule,
+    GroupsList,
+    AccountGroupList,
+    ContactGroupList,
+    GoogleMap
+) {
 
-    return dojo.declare('Mobile.Sample.ApplicationModule', Sage.Platform.Mobile.ApplicationModule, {
+    return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
         //localization strings
         regionText: 'region',
         faxText: 'fax num',
@@ -32,11 +50,11 @@ define('Mobile/Sample/ApplicationModule', [
             this.inherited(arguments);
 
            //Register views for group support
-            this.registerView(new Mobile.Sample.Views.GroupsList());
-            this.registerView(new Mobile.Sample.Views.Account.GroupList());
-            this.registerView(new Mobile.Sample.Views.Contact.GroupList());
+            this.registerView(new GroupsList());
+            this.registerView(new AccountGroupList());
+            this.registerView(new ContactGroupList());
            //Register custom Google Map view
-            this.registerView(new Mobile.Sample.Views.GoogleMap());
+            this.registerView(new GoogleMap());
         },
         loadCustomizations: function() {
             this.inherited(arguments);
@@ -44,7 +62,7 @@ define('Mobile/Sample/ApplicationModule', [
             //We want to add the Groups list view to the default set of home screen views.
             //Save the original getDefaultviews() function.
             var originalDefViews = Mobile.SalesLogix.Application.prototype.getDefaultViews;
-            dojo.extend(Mobile.SalesLogix.Application, {
+            lang.extend(Mobile.SalesLogix.Application, {
                 getDefaultViews: function() {
                     //Get view array from original function, or default to empty array
                     var views = originalDefViews.apply(this, arguments) || [];
@@ -250,7 +268,7 @@ define('Mobile/Sample/ApplicationModule', [
             });
 
             //Some customizations require extending the view class.
-            dojo.extend(Mobile.SalesLogix.Views.Account.Detail, {
+            lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
                 //Localization String
                 helloWorldAlertText: 'Hello World!',
 
@@ -268,7 +286,7 @@ define('Mobile/Sample/ApplicationModule', [
 
                     var request = new Sage.SData.Client.SDataSingleResourceRequest(this.getService())
                         .setResourceKind('accounts')
-                        .setResourceSelector(dojo.string.substitute("'${0}'", [parentId]))
+                        .setResourceSelector(string.substitute("'${0}'", [parentId]))
                         .setQueryArg('select', 'AccountName');
 
                     request.allowCacheUse = true;
@@ -291,11 +309,11 @@ define('Mobile/Sample/ApplicationModule', [
 
                 },
                 updateParentAccountDisplay: function() {
-                    var rowNode = dojo.query('[data-property="ParentAccount"]', this.domNode)[0],
-                        contentNode = rowNode && dojo.query('span', rowNode)[0];
+                    var rowNode = query('[data-property="ParentAccount"]', this.domNode)[0],
+                        contentNode = rowNode && query('span', rowNode)[0];
 
                     if (rowNode)
-                        dojo.removeClass(rowNode, 'content-loading');
+                        domClass.remove(rowNode, 'content-loading');
 
                     if (contentNode)
                         contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
@@ -319,14 +337,14 @@ define('Mobile/Sample/ApplicationModule', [
                         view.show({
                             key: this.options.key,
                             entity: 'Account',
-                            address: Mobile.SalesLogix.Format.address(this.entry['Address'], true, ' '),
+                            address: format.address(this.entry['Address'], true, ' '),
                             markerTitle: this.entry['AccountName'],
                             entry: this.entry
                         });
                 }
             });
 
-            dojo.extend(Mobile.SalesLogix.Views.Account.Edit, {
+            lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
                 // Add properties to the SData query for Account Edit mode
                 querySelect: Mobile.SalesLogix.Views.Account.Edit.prototype.querySelect.concat([
                     'ParentId'
@@ -342,14 +360,14 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     tag: 'mine',
                     query: function() {
-                        return dojo.string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
+                        return string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
                     }
                 }
             });
         },
         registerContactCustomizations: function() {
             //Override the list view row template in order to show phone #
-            dojo.extend(Mobile.SalesLogix.Views.Contact.List, {
+            lang.extend(Mobile.SalesLogix.Views.Contact.List, {
                 //First, make sure WorkPhone is included in the SData query.
                 querySelect: Mobile.SalesLogix.Views.Contact.List.prototype.querySelect.concat([
                     'WorkPhone'
@@ -398,7 +416,7 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     label: signatureText,
                     property: 'Notes',
-                    renderer: Sage.Platform.Mobile.Format.imageFromVector.bindDelegate(
+                    renderer: format.imageFromVector.bindDelegate(
                         this,
                         {
                             penColor: 'blue',
@@ -419,12 +437,12 @@ define('Mobile/Sample/ApplicationModule', [
 
                 The following properties are exposed so that you may tailor as needed:
              */
-            dojo.mixin(Sage.Platform.Mobile.ErrorManager, {
+            lang.mixin(Sage.Platform.Mobile.ErrorManager, {
                 // number of error logs to keep on device, defaults to 10
                 errorCacheSizeMax: 15
             });
 
-            dojo.extend(Mobile.SalesLogix.Views.ErrorLog.Detail, {
+            lang.extend(Mobile.SalesLogix.Views.ErrorLog.Detail, {
                 // for mobile devices this string will set as the To: field
                 // defaults to empty
                 defaultToAddress: 'techs@super-support.com',

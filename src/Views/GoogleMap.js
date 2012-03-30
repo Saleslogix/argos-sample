@@ -9,7 +9,19 @@
  *
  * ToDo: Resize map when browser window is re-sized or orientation changed.
  */
-define('Mobile/Sample/Views/GoogleMap', ['Sage/Platform/Mobile/View'], function() {
+define('Mobile/Sample/Views/GoogleMap', [
+    'dojo/_base/declare',
+    'dojo/dom',
+    'dojo/dom-geometry',
+    'Mobile/SalesLogix/Format',
+    'Sage/Platform/Mobile/View'
+], function(
+    declare,
+    dom,
+    domGeom,
+    format,
+    View
+) {
 
     return dojo.declare('Mobile.Sample.Views.GoogleMap', [Sage.Platform.Mobile.View], {
         widgetTemplate: new Simplate([
@@ -47,9 +59,9 @@ define('Mobile/Sample/Views/GoogleMap', ['Sage/Platform/Mobile/View'], function(
         resizeCanvas: function(){
             var barHeight = 0;
             for(var n in App.bars) {
-                barHeight += dojo.position(dojo.byId(App.bars[n].id)).h;
+                barHeight += domGeom.position(dojo.byId(App.bars[n].id)).h;
             };
-            var canvasElement = dojo.byId('mapcanvas');
+            var canvasElement = dom.byId('mapcanvas');
             if (canvasElement)
                 canvasElement.style.height = (window.innerHeight - barHeight) + 'px';
         },
@@ -60,11 +72,12 @@ define('Mobile/Sample/Views/GoogleMap', ['Sage/Platform/Mobile/View'], function(
             this.resizeCanvas();
         },
         initMap: function() {
+            var addressText = '';
 
             if (this.options && this.options.address)
-            {
                 addressText = this.options.address;
-            } else addressText = '85258';
+            else
+                addressText = '85258';
 
             this.geocoder.geocode(
                 { address: addressText },
@@ -107,7 +120,7 @@ define('Mobile/Sample/Views/GoogleMap', ['Sage/Platform/Mobile/View'], function(
                 }
                 // create the map, attaching it to the map_canvas element
                 else {
-                    var canvasElement = dojo.byId('mapcanvas');//document.getElementById('mapcanvas');
+                    var canvasElement = dom.byId('mapcanvas');
                     if (canvasElement) {
                         this.map = new google.maps.Map(
                             canvasElement, myOptions);
@@ -144,7 +157,7 @@ define('Mobile/Sample/Views/GoogleMap', ['Sage/Platform/Mobile/View'], function(
             this.initMap();
         },
         viewAddress: function() {
-            App.showMapForAddress(Mobile.SalesLogix.Format.address(this.options.entry['Address'], true, ' '));
+            App.showMapForAddress(format.address(this.options.entry['Address'], true, ' '));
         }
     });
 });

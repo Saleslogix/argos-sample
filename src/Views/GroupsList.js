@@ -1,19 +1,14 @@
-/**
- * Created by JetBrains WebStorm.
- * User: jhershauer
- * Date: 7/11/11
- * Time: 5:18 PM
- * To change this template use File | Settings | File Templates.
- */
-/// <reference path="../../../../argos-sdk/libraries/ext/ext-core-debug.js"/>
-/// <reference path="../../../../argos-sdk/libraries/sdata/sdata-client-debug"/>
-/// <reference path="../../../../argos-sdk/libraries/Simplate.js"/>
-/// <reference path="../../../../argos-sdk/src/View.js"/>
-/// <reference path="../../../../argos-sdk/src/Detail.js"/>
+define('Mobile/Sample/Views/GroupsList', [
+    'dojo/_base/declare',
+    'dojo/string',
+    'Sage/Platform/Mobile/List'
+], function(
+    declare,
+    string,
+    List
+) {
 
-define('Mobile/Sample/Views/GroupsList', ['Sage/Platform/Mobile/List'], function() {
-
-    return dojo.declare('Mobile.Sample.Views.GroupsList', [Sage.Platform.Mobile.List], {
+    return declare('Mobile.Sample.Views.GroupsList', [List], {
         //Templates
         //
         //Basic content template to show group name and family
@@ -39,11 +34,8 @@ define('Mobile/Sample/Views/GroupsList', ['Sage/Platform/Mobile/List'], function
             'contact': 'upper(family) eq "CONTACT"'
             },
 
-        formatSearchQuery: function(query) {
-            return dojo.string.substitute('upper(name) like "${0}%"', [this.escapeSearchQuery(query.toUpperCase())]);
-        },
-        init: function() {
-            this.inherited(arguments);
+        formatSearchQuery: function(searchQuery) {
+            return string.substitute('upper(name) like "${0}%"', [this.escapeSearchQuery(searchQuery.toUpperCase())]);
         },
         createToolLayout: function(){
             // Empty the toolbar. This is a read-only view.

@@ -5,10 +5,10 @@
  * Time: 12:35 PM
  * To change this template use File | Settings | File Templates.
  */
-define('configuration/sample/production', ['configuration/production', 'Mobile/Sample/ApplicationModule'], function(baseConfiguration) {
+define('configuration/sample/production', ['configuration/production', 'Mobile/Sample/ApplicationModule'], function(baseConfiguration, SampleApplicationModule) {
     return mergeConfiguration(baseConfiguration, {
         modules: [
-            new Mobile.Sample.ApplicationModule()
+            new SampleApplicationModule()
         ]
     });
 });
