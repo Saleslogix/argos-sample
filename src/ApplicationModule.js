@@ -19,11 +19,18 @@ define('Mobile/Sample/ApplicationModule', [
     'dojo/query',
     'dojo/dom-class',
     'Mobile/SalesLogix/Format',
+    'Mobile/SalesLogix/Template',
     'Sage/Platform/Mobile/ApplicationModule',
+    'Sage/Platform/Mobile/Views/Chart',
+    'Mobile/Sample/Views/Reports',
     'Mobile/Sample/Views/GroupsList',
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
-    'Mobile/Sample/Views/GoogleMap'
+    'Mobile/Sample/Views/GoogleMap',
+    'Sage/Platform/Mobile/Charts/PieChart',
+    'Sage/Platform/Mobile/Charts/BarChart',
+    'Sage/Platform/Mobile/Charts/LineChart',
+    'Sage/Platform/Mobile/Charts/ColumnChart'
 ], function(
     declare,
     lang,
@@ -31,7 +38,10 @@ define('Mobile/Sample/ApplicationModule', [
     query,
     domClass,
     format,
+    template,
     ApplicationModule,
+    Chart,
+    Reports,
     GroupsList,
     AccountGroupList,
     ContactGroupList,
@@ -45,15 +55,21 @@ define('Mobile/Sample/ApplicationModule', [
         helloWorldText: 'Say Hello.',
         helloWorldValueText: 'Click to show alert.',
         parentText: 'parent',
+        contactCityText: 'Contacts By City',
 
         loadViews: function() {
             this.inherited(arguments);
 
-           //Register views for group support
+            // Register view for charting reports
+            this.registerView(new Reports());
+            this.registerView(new Chart());
+
+            // Register views for group support
             this.registerView(new GroupsList());
             this.registerView(new AccountGroupList());
             this.registerView(new ContactGroupList());
-           //Register custom Google Map view
+
+            // Register custom Google Map view
             this.registerView(new GoogleMap());
         },
         loadCustomizations: function() {
@@ -67,7 +83,7 @@ define('Mobile/Sample/ApplicationModule', [
                     //Get view array from original function, or default to empty array
                     var views = originalDefViews.apply(this, arguments) || [];
                     //Add custom view(s)
-                    views.push('groups_list');
+                    views.push('groups_list', 'report_detail');
                     return views;
                 }
             });
@@ -159,6 +175,45 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     name: 'Region',
                     label: this.regionText
+                }
+            });
+
+            // Add a pie chart showing contacts by city using the executeMetric SData function
+            // If you are not planning on using the default executeMetric function make sure to provide:
+            // 1) custom createRequest, 2) custom processFeed
+            this.registerCustomization('detail', 'account_detail', {
+                at: function(row) { return row.name == 'MoreDetailsSection';},
+                type: 'insert',
+                where: 'after',
+                value: {
+                    title: this.contactCityText,
+                    collapsed: true,
+                    name: 'ContactsCityChart',
+                    children: [{
+                        name: 'ContactsByCity',
+                        property: 'AccountName',
+                        chart: {
+                            type: 'pie',
+                            resourceKind: 'contacts',
+                            resourceProperty: '$queries',
+                            resourceCommand: 'executeMetric',
+                            where: {
+                                _filterName: 'City',
+                                _metricName: 'CountContacts',
+                                _activeFilter: 'AccountName eq "${0}"'
+                            },
+                            maxHeight: 300,
+                            legend: true,
+                            legendOptions: {
+                                horizontal: false
+                            },
+                            plotOptions: {
+                                labelStyle: 'columns',
+                                labelWiring: '#ccc',
+                                htmlLabels: true
+                            }
+                        }
+                    }]
                 }
             });
 
