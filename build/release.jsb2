@@ -21,6 +21,10 @@
           "path": "../src/Views/Contact"
         },
         {
+          "text": "Reports.js",
+          "path": "../src/Views"
+        },
+        {
           "text": "GoogleMap.js",
           "path": "../src/Views"
         },

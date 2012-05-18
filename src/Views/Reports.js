@@ -90,6 +90,9 @@ define('Mobile/Sample/Views/Reports', [
                         negateHistory: true,
                         chart: {
                             type: 'column',
+                            chartOptions: {
+                                title: 'Sales Potential'
+                            },
                             resourceKind: 'opportunities',
                             resourceProperty: '$queries',
                             resourceCommand: 'executeMetric',
@@ -117,6 +120,9 @@ define('Mobile/Sample/Views/Reports', [
                         negateHistory: true,
                         chart: {
                             type: 'line',
+                            chartOptions: {
+                                title: 'Recent Lead Creation'
+                            },
                             resourceKind: 'leads',
                             resourceProperty: '$queries',
                             resourceCommand: 'executeMetric',
@@ -151,6 +157,9 @@ define('Mobile/Sample/Views/Reports', [
                         negateHistory: true,
                         chart: {
                             type: 'bar',
+                            chartOptions: {
+                                title: 'Activities Trend'
+                            },
                             legend: false,
                             plotOptions: {
                                 minorTicks: false
@@ -187,6 +196,9 @@ define('Mobile/Sample/Views/Reports', [
                         negateHistory: true,
                         chart: {
                             type: 'pie',
+                            chartOptions: {
+                                title: 'Account Revenue'
+                            },
                             resourceKind: 'accounts',
                             resourceProperty: '$queries',
                             resourceCommand: 'executeMetric',
