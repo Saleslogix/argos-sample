@@ -200,7 +200,7 @@ define('Mobile/Sample/ApplicationModule', [
                             where: {
                                 _filterName: 'City',
                                 _metricName: 'CountContacts',
-                                _activeFilter: 'AccountName eq "${0}"'
+                                _activeFilter: Mobile.SalesLogix.Views.Account.Detail.prototype.formatRelatedQuery.bindDelegate(this, 'AccountName eq "${0}"', 'AccountName')
                             },
                             maxHeight: 300,
                             legend: true,

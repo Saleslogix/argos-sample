@@ -44,7 +44,7 @@ define('Mobile/Sample/Views/Reports', [
         },
         onStateRevenueClick: function(evt) {
             var data = evt.run.data[evt.index];
-            var view = App.getView('account_list');
+            var view = App.getView('account_related');
             if (view)
                 view.show({
                    where: string.substitute('Address.State eq "${0}"', [data.text])
