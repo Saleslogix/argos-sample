@@ -129,6 +129,21 @@ define('Mobile/Sample/ApplicationModule', [
             });
         },
         registerAccountCustomizations: function() {
+            // Add a custom list panel action to Account List that
+            // shows a heart warming message
+            this.registerCustomization('list/actions', 'account_list', {
+                at: function(action){ return action.id === 'callMain'; },
+                type: 'insert',
+                where: 'before',
+                value: {
+                    id: 'customAction',
+                    icon: 'content/images/icons/Hello_World_24.png',
+                    label: this.helloWorldText,
+                    fn: function(action, selection) {
+                        alert(selection.data['$descriptor']+' says "Hello!"');
+                    }
+                }
+            });
 
             // Add a custom toolbar item to Account Detail that uses
             // the associated Edit Views "Update" security role
