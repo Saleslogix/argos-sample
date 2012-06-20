@@ -94,7 +94,7 @@ define('Mobile/Sample/ApplicationModule', [
 
             // When inserting values you may also pass an array to insert multiple items
             // This case its adding two hash tags: l500k and g1m for filtering
-            // Opportunities worth less than $500,00 or greater than $1 million
+            // Opportunities worth less than $500,000 or greater than $1 million
             this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
                 at: true, // insert anywhere (hash tag queries are not ordered)
                 type: 'insert',
