@@ -91,15 +91,21 @@ define('Mobile/Sample/ApplicationModule', [
                     query: 'SalesPotential gt "500000"'
                 }
             });
-            
-            // Add the hash tag "g500k" to see all Opportunities worth more than $500k
+
+            // When inserting values you may also pass an array to insert multiple items
+            // This case its adding two hash tags: l500k and g1m for filtering
+            // Opportunities worth less than $500,00 or greater than $1 million
             this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
                 at: true, // insert anywhere (hash tag queries are not ordered)
                 type: 'insert',
-                value: {
-                    tag: 'l500k',
-                    query: 'SalesPotential lt "500000"'
-                }
+                value: [
+                    {
+                        tag: 'l500k',
+                        query: 'SalesPotential lt "500000"'
+                    },{
+                        tag: 'g1m',
+                        query: 'SalesPotential gt "1000000"'
+                    }]
             });
 
             // Remove the hash tag "won" from Opportunity List View Search
