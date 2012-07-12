@@ -17,6 +17,8 @@ This sample module was designed to show how you can add customizations to an exi
 *  A rudimentary Groups implementation using the Groups SData endpoint (GroupsList.js)
 *  Show how to add a custom view (groups_list) to the "default" set of views displayed on the home screen.
 *  Example of handling a self-join where only the ID is available (Parent in Account Detail/Edit)
+*  Inserting and modifying hash tags for List View searches
+*  Example of performing multiple customizations with a single customization call
 
 #Installation
 
@@ -86,7 +88,7 @@ This sample module was designed to show how you can add customizations to an exi
 
 #### Before You Start
 
-You should place information about your customization module in the `module-info.json` file in the root directory. This information will be displayed in Application Architect for easy identification and versioning.
+1\. Information about your customization module is defined in the `module-info.json` file at the root directory. This information will be displayed in Application Architect for easy identification and versioning.
 
 Location:
 
@@ -107,6 +109,20 @@ Example:
     "targetProduct": "saleslogix"
 }
 ```
+
+2\. Then open the `module-fragment.html` file also at the root of the module folder. This file will be placed into all the `index` files (either manually via copy pasting the lines or automatically through AA).
+
+3\. Edit it to point to your where your final built script and stylesheet will be (as seen in your `build/release.jsb2` file):
+
+```
+    <!-- Sample -->
+    <link type="text/css" rel="stylesheet" href="content/css/sample.css" />
+    <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
+```    
+
+4\. If you are deploying using AA 8.0+ then all you need to do now is within AA right click on CustomModules in the SLXMobile portal and choose Add Custom Module. Then browse to the `module-info.json` file and hit okay. AA will handle building, minifying, editing the index files and enabling you to select/deselect modules as needed. Make sure to save and re-deploy after any changes.
+
+5\. If you are not using AA 8.0+ to deploy then please continue.
 
 #### Requirements
 *	Windows
@@ -130,21 +146,9 @@ Example:
 
 		mobile\products\argos-sample\deploy
 
-2\. Then open the `module-fragment.html` file. This file will be placed into all the `index` files (either manually via copy pasting the lines or automatically through AA).
+2\. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
 
-3\. Edit it to point to your built script and stylesheet (following the `deploy` folder layout):
-
-```
-    <!-- Sample -->
-    <link type="text/css" rel="stylesheet" href="content/css/sample.css" />
-    <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
-```    
-
-4\. At this point this guide will continue assuming you are manually deploying, if you are using AA 8.0 or higher then follow it's documentation for adding custom modules to the portal.
-
-5\. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
-
-6\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier, this file is not copied into the deploy folder so look for it in your normal dev directory) into each file at the designated modules marker:
+3\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier, this file is not copied into the deploy folder so look for it in your normal dev directory) into each file at the designated modules marker:
 
 ```
     <!-- Modules -->
@@ -158,7 +162,7 @@ To:
     <link type="text/css" rel="stylesheet" href="content/css/sample.css" />
     <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
 
-7\. Lastly we need to add the modules configuration and the localization by editing the following lines:
+4\. Lastly we need to add the modules configuration and the localization by editing the following lines:
 
 ```
     (function() {
