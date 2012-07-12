@@ -86,7 +86,27 @@ This sample module was designed to show how you can add customizations to an exi
 
 #### Before You Start
 
-You may place information about your customization module in the `module-info.json` file in the root directory. This information will be displayed in Application Architect (in the next release) for easy identification and versioning.
+You should place information about your customization module in the `module-info.json` file in the root directory. This information will be displayed in Application Architect for easy identification and versioning.
+
+Location:
+
+```
+mobile/products/argos-sample/module-info.json
+```
+
+Example:
+
+```
+{
+    "name": "sample",
+    "displayName": "Sample Customizations",
+    "description": "A sample module implementation that shows how to customize the Sage SalesLogix Mobile client.",
+    "majorVersion": 1,
+    "minorVersion": 1,
+    "buildNumber": 0,
+    "targetProduct": "saleslogix"
+}
+```
 
 #### Requirements
 *	Windows
@@ -112,7 +132,7 @@ You may place information about your customization module in the `module-info.js
 
 2\. Then open the `module-fragment.html` file. This file will be placed into all the `index` files (either manually via copy pasting the lines or automatically through AA).
 
-3\. Edit it to point to your minified script and stylesheet (following the `deploy` folder layout):
+3\. Edit it to point to your built script and stylesheet (following the `deploy` folder layout):
 
 ```
     <!-- Sample -->
@@ -120,7 +140,7 @@ You may place information about your customization module in the `module-info.js
     <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
 ```    
 
-4\. At this point this guide will continue assuming you are manually deploying, this section will change when AA supports Mobile Deployment.
+4\. At this point this guide will continue assuming you are manually deploying, if you are using AA 8.0 or higher then follow it's documentation for adding custom modules to the portal.
 
 5\. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
 
