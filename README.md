@@ -99,6 +99,6 @@ This sample module was designed to show how you can add customizations to an exi
 		
 
 
-[argos-sdk]: https://github.com/SageScottsdalePlatform/argos-sdk "Argos SDK Source"
-[argos-saleslogix]: https://github.com/SageScottsdalePlatform/argos-saleslogix "Argos SalesLogix Source"
-[argos-sample]: https://github.com/SageScottsdalePlatform/argos-sample "Argos Sample"
+[argos-sdk]: https://github.com/Sage/argos-sdk/tree/1.2 "Argos SDK Source"
+[argos-saleslogix]: https://github.com/SageSalesLogix/argos-saleslogix/tree/1.2 "Argos SalesLogix Source"
+[argos-sample]: https://github.com/SageSalesLogix/argos-sample/tree/1.2 "Argos Sample"
