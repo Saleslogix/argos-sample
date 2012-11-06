@@ -1,14 +1,16 @@
 define('Mobile/Sample/Views/GroupsList', [
     'dojo/_base/declare',
     'dojo/string',
-    'Sage/Platform/Mobile/List'
+    'argos/List',
+    'argos/_SDataList'
 ], function(
     declare,
     string,
-    List
+    List,
+    _SDataList
 ) {
 
-    return declare('Mobile.Sample.Views.GroupsList', [List], {
+    return declare('Mobile.Sample.Views.GroupsList', [List, _SDataList], {
         //Templates
         //
         //Basic content template to show group name and family

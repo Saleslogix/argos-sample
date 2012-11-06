@@ -1,14 +1,16 @@
 define('Mobile/Sample/Views/Contact/GroupList', [
     'dojo/_base/declare',
     'dojo/string',
-    'Sage/Platform/Mobile/List'
+    'argos/List',
+    'argos/_SDataList'
 ], function(
     declare,
     string,
-    List
+    List,
+    _SDataList
 ) {
 
-    return declare('Mobile.Sample.Views.Contact.GroupList', [List], {
+    return declare('Mobile.Sample.Views.Contact.GroupList', [List, _SDataList], {
         //Templates
         itemTemplate: new Simplate([
             '<h3>{%: $.NAMELF %}</h3>',

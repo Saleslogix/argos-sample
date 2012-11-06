@@ -15,70 +15,66 @@
 define('Mobile/Sample/ApplicationModule', [
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/Deferred',
     'dojo/string',
     'dojo/query',
+    'dojo/NodeList-manipulate',
     'dojo/dom-class',
     'Mobile/SalesLogix/Format',
-    'Sage/Platform/Mobile/ApplicationModule',
-    'Mobile/Sample/Views/GroupsList',
-    'Mobile/Sample/Views/Account/GroupList',
-    'Mobile/Sample/Views/Contact/GroupList',
-    'Mobile/Sample/Views/GoogleMap'
+    'argos/ApplicationModule',
+    './ApplicationViews'
 ], function(
     declare,
     lang,
+    Deferred,
     string,
     query,
+    nodeListManipulate,
     domClass,
     format,
     ApplicationModule,
-    GroupsList,
-    AccountGroupList,
-    ContactGroupList,
-    GoogleMap
+    ApplicationViews
 ) {
 
-    return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
+    return declare('Mobile.Sample.ApplicationModule', [ApplicationModule], {
         //localization strings
         regionText: 'region',
         faxText: 'fax num',
         helloWorldText: 'Say Hello.',
         helloWorldValueText: 'Click to show alert.',
         parentText: 'parent',
+        groupsText: 'Groups',
 
-        loadViews: function() {
+        loadViews: function(scene) {
             this.inherited(arguments);
 
-           //Register views for group support
-            this.registerView(new GroupsList());
-            this.registerView(new AccountGroupList());
-            this.registerView(new ContactGroupList());
-           //Register custom Google Map view
-            this.registerView(new GoogleMap());
+            scene.registerViews(ApplicationViews);
         },
         loadCustomizations: function() {
             this.inherited(arguments);
 
-            //We want to add the Groups list view to the default set of home screen views.
-            //Save the original getDefaultviews() function.
-            var originalDefViews = Mobile.SalesLogix.Application.prototype.getDefaultViews;
-            lang.extend(Mobile.SalesLogix.Application, {
-                getDefaultViews: function() {
-                    //Get view array from original function, or default to empty array
-                    var views = originalDefViews.apply(this, arguments) || [];
-                    //Add custom view(s)
-                    views.push('groups_list');
-                    return views;
-                }
-            });
-
+            this.registerHomeCustomizations();
             this.registerAccountCustomizations();
             this.registerContactCustomizations();
             this.registerOpportunityCustomizations();
             this.registerLeadCustomizations();
             this.registerErrorLogCustomizations();
         },
-        registerOpportunityCustomizations: function(){
+        registerHomeCustomizations: function() {
+            this.registerCustomization('home/home', 'home', {
+                at: true,
+                type: 'insert',
+                value: {
+                    'name': 'groups_list',
+                    'view': 'groups_list',
+                    'action': 'navigateToView',
+                    'default': true,
+                    'icon': 'content/images/icons/Ticket_24x24.png',
+                    'title': this.groupsText
+                }
+            });
+        },
+        registerOpportunityCustomizations: function() {
             // Add the hash tag "g500k" to see all Opportunities worth more than $500k
             // Hash tags can be combined (uses AND logic) so try out:
             // #open #g500k
@@ -154,8 +150,8 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     id: 'customButton',
                     icon: 'content/images/icons/Hello_World_24.png',
-                    action: 'showHelloWorld',
-                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
+                    action: 'showHelloWorld'//,
+                    //security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
                 }
             });
 
@@ -267,7 +263,19 @@ define('Mobile/Sample/ApplicationModule', [
                     name: 'ParentAccount',
                     label: this.parentText,
                     cls: 'content-loading',
-                    value: 'loading...'
+                    value: 'loading...',
+                    onCreate: function(row, node, value, entry) {
+                        // since we are requesting the same entity type, we can re-use the store
+                        var result = this.store.get(entry['ParentId']);
+
+                        Deferred.when(result, lang.hitch(this, function(parentAccount) {
+                            this.item['ParentAccount'] = parentAccount;
+
+                            domClass.remove(node, 'content-loading');
+
+                            query('span', node).innerHTML(parentAccount && parentAccount['AccountName'] || '');
+                        }));
+                    }
                 }
             });
 
@@ -289,6 +297,7 @@ define('Mobile/Sample/ApplicationModule', [
             });
 
             //Some customizations require extending the view class.
+            /*
             lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
                 //Localization String
                 helloWorldAlertText: 'Hello World!',
@@ -302,55 +311,6 @@ define('Mobile/Sample/ApplicationModule', [
                     alert(this.helloWorldAlertText);
                 },
 
-                requestParentAccount: function(parentId)
-                {
-
-                    var request = new Sage.SData.Client.SDataSingleResourceRequest(this.getService())
-                        .setResourceKind('accounts')
-                        .setResourceSelector(string.substitute("'${0}'", [parentId]))
-                        .setQueryArg('select', 'AccountName');
-
-                    request.allowCacheUse = true;
-                    request.read({
-                        success: this.processParentAccount,
-                        failure: this.processParentAccountFailure,
-                        scope: this
-                    });
-
-                },
-                processParentAccountFailure: function(xhr, o) {
-                    this.updateParentAccountDisplay();
-                },
-                processParentAccount: function(parentEntry) {
-                    if (parentEntry)
-                    {
-                        this.entry['ParentAccount'] = parentEntry;
-                        this.updateParentAccountDisplay();
-                    }
-
-                },
-                updateParentAccountDisplay: function() {
-                    var rowNode = query('[data-property="ParentAccount"]', this.domNode)[0],
-                        contentNode = rowNode && query('span', rowNode)[0];
-
-                    if (rowNode)
-                        domClass.remove(rowNode, 'content-loading');
-
-                    if (contentNode)
-                        contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
-                },
-                processEntry: function(entry) {
-                    Mobile.SalesLogix.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
-                    if (entry && entry['ParentId'])
-                    {
-                        this.requestParentAccount(entry['ParentId']);
-                    }
-                    else
-                    {
-                        this.updateParentAccountDisplay();
-                    }
-
-                },
                 //Add a supporting action for displaying the map view.
                 showMap: function() {
                     var view = App.getView('googlemapview');
@@ -364,13 +324,7 @@ define('Mobile/Sample/ApplicationModule', [
                         });
                 }
             });
-
-            lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
-                // Add properties to the SData query for Account Edit mode
-                querySelect: Mobile.SalesLogix.Views.Account.Edit.prototype.querySelect.concat([
-                    'ParentId'
-                ])
-            });
+            */
 
             // Adds a #hash tag query to the Account List View Search
             // Shows you can pass a dynamic query to a hash tag
@@ -388,17 +342,20 @@ define('Mobile/Sample/ApplicationModule', [
         },
         registerContactCustomizations: function() {
             //Override the list view row template in order to show phone #
-            lang.extend(Mobile.SalesLogix.Views.Contact.List, {
-                //First, make sure WorkPhone is included in the SData query.
-                querySelect: Mobile.SalesLogix.Views.Contact.List.prototype.querySelect.concat([
-                    'WorkPhone'
-                ]),
-                itemTemplate: new Simplate([
-                    '<h3>{%: $.NameLF %}</h3>',
-                    '<h4>{%: $.AccountName %}</h4>',
-                    '<h4>{%: Mobile.SalesLogix.Format.phone($.WorkPhone, false) %}</h4>'
-                ])
+            /*
+            require(['Mobile/SalesLogix/Views/Contact/List'], function(List) {
+                lang.extend(List, {
+                    querySelect: List.prototype.querySelect.concat([
+                        'WorkPhone'
+                    ]),
+                    itemTemplate: new Simplate([
+                        '<h3>{%: $.NameLF %}</h3>',
+                        '<h4>{%: $.AccountName %}</h4>',
+                        '<h4>{%: Mobile.SalesLogix.Format.phone($.WorkPhone, false) %}</h4>'
+                    ])
+                });
             });
+            */
 
             // Here we add a tool with its own custom security
             // Admin user can access everything, others have to match the security string
@@ -457,7 +414,8 @@ define('Mobile/Sample/ApplicationModule', [
                 The Detail view of an error log contains either an email button (mobile devices) or copy to clipboard button (desktops).
 
                 The following properties are exposed so that you may tailor as needed:
-             */
+            */
+            /*
             lang.mixin(Sage.Platform.Mobile.ErrorManager, {
                 // number of error logs to keep on device, defaults to 10
                 errorCacheSizeMax: 15
@@ -474,6 +432,7 @@ define('Mobile/Sample/ApplicationModule', [
                 // for desktops the message to display when it is copied to clipboard
                 copiedSuccessText: 'Error Report copied to clipboard'
             });
+            */
         }
     });
 });

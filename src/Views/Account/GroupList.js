@@ -1,14 +1,16 @@
 define('Mobile/Sample/Views/Account/GroupList', [
     'dojo/_base/declare',
     'dojo/string',
-    'Sage/Platform/Mobile/List'
+    'argos/List',
+    'argos/_SDataList'
 ], function(
     declare,
     string,
-    List
+    List,
+    _SDataList
 ) {
 
-    return declare('Mobile.Sample.Views.Account.GroupList', [List], {
+    return declare('Mobile.Sample.Views.Account.GroupList', [List, _SDataList], {
         //Templates
         //No $key or $descriptor with groups endpoint.
         itemTemplate: new Simplate([
