@@ -1,14 +1,16 @@
 define('Mobile/Sample/Views/Contact/GroupList', [
     'dojo/_base/declare',
     'dojo/string',
-    'Sage/Platform/Mobile/List'
+    'argos/List',
+    'argos/_SDataListMixin'
 ], function(
     declare,
     string,
-    List
+    List,
+    _SDataListMixin
 ) {
 
-    return declare('Mobile.Sample.Views.Contact.GroupList', [List], {
+    return declare('Mobile.Sample.Views.Contact.GroupList', [List, _SDataListMixin], {
         //Templates
         itemTemplate: new Simplate([
             '<h3>{%: $.NAMELF %}</h3>',
@@ -31,6 +33,7 @@ define('Mobile/Sample/Views/Contact/GroupList', [
         icon: 'content/images/icons/Contacts_24x24.png',
         id: 'contact_grouplist',
         insertView: 'contact_edit',
+        contractName: 'system',
         queryOrderBy: 'NAMELF',
         querySelect: [
             'CONTACTID',
@@ -43,33 +46,19 @@ define('Mobile/Sample/Views/Contact/GroupList', [
         formatSearchQuery: function(searchQuery) {
             return string.substitute('NAMELF like "${0}%"', [this.escapeSearchQuery(searchQuery.toUpperCase())]);
         },
-        init: function() {
-            this.inherited(arguments);
-        },
         createToolLayout: function(){
             // Empty the toolbar. This is a read-only view.
             return this.tools || (this.tools = {
                 'tbar': []
             });
         },
-        show: function(options) {
-            this.set('title',(options && options.title || this.title));
-            this.inherited(arguments);
-        },
         //This is a special system endpoint, not part of the standard dynamic entity feeds.
-        createRequest: function() {
-            var request = Mobile.Sample.Views.Contact.GroupList.superclass.createRequest.call(this)
-                .setContractName('system');
-            request.setQueryArg('_groupId', this.options._groupId);
-            return request;
-        },
-        activateEntry: function(params) {
-            var view = App.getView(this.detailView);
-            if (view)
-                view.show({
-                    descriptor: params.descriptor,
-                    key: params.key
-                });
+        _applyStateToQueryOptions: function(queryOptions) {
+            this.inherited(arguments);
+
+            queryOptions['queryArgs'] = {
+                _groupId: this.options._groupId
+            };
         },
         //See if we need to refresh the view (only if we're showing a different group than the last time)
         refreshRequiredFor: function(options) {
@@ -83,7 +72,7 @@ define('Mobile/Sample/Views/Contact/GroupList', [
                 return false;
             }
             else
-                return Mobile.Sample.Views.Contact.GroupList.superclass.refreshRequiredFor.call(this, options);
+                return this.inherited(arguments);
         }
     });
 });

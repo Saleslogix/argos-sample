@@ -19,11 +19,16 @@ define('Mobile/Sample/ApplicationModule', [
     'dojo/query',
     'dojo/dom-class',
     'Mobile/SalesLogix/Format',
-    'Sage/Platform/Mobile/ApplicationModule',
-    'Mobile/Sample/Views/GroupsList',
-    'Mobile/Sample/Views/Account/GroupList',
-    'Mobile/Sample/Views/Contact/GroupList',
-    'Mobile/Sample/Views/GoogleMap'
+    'argos/ApplicationModule',
+    'argos/ErrorManager',
+    './FilterBar',
+    './FilterSeperator',
+    'Mobile/SalesLogix/Views/Account/Detail',
+    'Mobile/SalesLogix/Views/Account/Edit',
+    'Mobile/SalesLogix/Views/Contact/List',
+    'Mobile/SalesLogix/Views/ErrorLog/Detail',
+    './ApplicationViews',
+    'argos!scene'
 ], function(
     declare,
     lang,
@@ -32,10 +37,15 @@ define('Mobile/Sample/ApplicationModule', [
     domClass,
     format,
     ApplicationModule,
-    GroupsList,
-    AccountGroupList,
-    ContactGroupList,
-    GoogleMap
+    ErrorManager,
+    FilterBar,
+    FilterSeperator,
+    AccountDetail,
+    AccountEdit,
+    ContactList,
+    ErrorLogDetail,
+    ApplicationViews,
+    scene
 ) {
 
     return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
@@ -45,30 +55,28 @@ define('Mobile/Sample/ApplicationModule', [
         helloWorldText: 'Say Hello.',
         helloWorldValueText: 'Click to show alert.',
         parentText: 'parent',
+        groupsText: 'Groups',
 
         loadViews: function() {
             this.inherited(arguments);
 
-           //Register views for group support
-            this.registerView(new GroupsList());
-            this.registerView(new AccountGroupList());
-            this.registerView(new ContactGroupList());
-           //Register custom Google Map view
-            this.registerView(new GoogleMap());
+            scene().registerViews(ApplicationViews);
         },
         loadCustomizations: function() {
             this.inherited(arguments);
 
             //We want to add the Groups list view to the default set of home screen views.
-            //Save the original getDefaultviews() function.
-            var originalDefViews = Mobile.SalesLogix.Application.prototype.getDefaultViews;
-            lang.extend(Mobile.SalesLogix.Application, {
-                getDefaultViews: function() {
-                    //Get view array from original function, or default to empty array
-                    var views = originalDefViews.apply(this, arguments) || [];
-                    //Add custom view(s)
-                    views.push('groups_list');
-                    return views;
+            this.registerCustomization('home/home', 'home', {
+                at: function(row) { return row.name === 'history_list';},
+                type: 'insert',
+                where: 'before',
+                value: {
+                    'name': 'groups_list',
+                    'view': 'groups_list',
+                    'action': 'navigateToView',
+                    'default': true,
+                    'title': this.groupsText,
+                    'icon': 'content/images/icons/filter_24.png'
                 }
             });
 
@@ -127,6 +135,84 @@ define('Mobile/Sample/ApplicationModule', [
                     query: 'Type eq "Product"'
                 }
             });
+
+
+            this.registerCustomization('list/components', 'ticket_list', {
+                at: function(component) { return component.name === 'search';},
+                type: 'insert',
+                value: {
+                    name: 'filter',
+                    type: FilterBar,
+                    attachPoint: 'toolbars.filter',
+                    props: {
+                        managed: true
+                    }
+                }
+            });
+            this.registerCustomization('list/tools', 'ticket_list', {
+                at: function(item) { return item.name === 'top'},
+                type: 'insert',
+                value: {
+                    name: 'filter',
+                    children: [{
+                        name: 'open',
+                        filter: 'open',
+                        query: "(StatusCode ne 'k6UJ9A000037')",
+                        label: 'Open',
+                        place: 'auto',
+                        group: 'status'
+                    },{
+                        name: 'closed',
+                        filter: 'closed',
+                        query: "(StatusCode eq 'k6UJ9A000037')",
+                        label: 'Closed',
+                        place: 'auto',
+                        group: 'status'
+                    },{
+                        name: 'spacer',
+                        type: FilterSeperator,
+                        place: 'space'
+                    },{
+                        name: 'high',
+                        filter: 'high',
+                        query: "(Urgency.Description eq 'High')",
+                        label: 'High',
+                        place: 'auto',
+                        group: 'urgency'
+                    },{
+                        name: 'medium',
+                        filter: 'medium',
+                        query: "(Urgency.Description eq 'Medium')",
+                        label: 'Medium',
+                        place: 'auto',
+                        group: 'urgency'
+                    },{
+                        name: 'low',
+                        filter: 'low',
+                        query: "(Urgency.Description eq 'Low')",
+                        label: 'Low',
+                        place: 'auto',
+                        group: 'urgency'
+                    }]
+                }
+            });
+            require(['Mobile/SalesLogix/Views/Ticket/List'], function(TicketList) {
+                var origBuildQuery = TicketList.prototype._buildQueryExpression;
+                lang.extend(TicketList, {
+                    _buildQueryExpression: function() {
+                        var query = origBuildQuery.apply(this, arguments),
+                            filters = this.$.filter.getActiveFilterQueries();
+
+                        if (filters && query)
+                            query += ' and ' + filters;
+                        else if (filters)
+                            query = filters;
+
+                        return query;
+                    }
+                });
+            });
+
         },
         registerAccountCustomizations: function() {
             // Add a custom list panel action to Account List that
@@ -154,8 +240,8 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     id: 'customButton',
                     icon: 'content/images/icons/Hello_World_24.png',
-                    action: 'showHelloWorld',
-                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
+                    action: 'showHelloWorld'//,
+                    //security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
                 }
             });
 
@@ -289,12 +375,12 @@ define('Mobile/Sample/ApplicationModule', [
             });
 
             //Some customizations require extending the view class.
-            lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
+            lang.extend(AccountDetail, {
                 //Localization String
                 helloWorldAlertText: 'Hello World!',
 
                 //Add Region property to the SData query for the Account Detail view
-                querySelect: Mobile.SalesLogix.Views.Account.Detail.prototype.querySelect.concat([
+                querySelect: AccountDetail.prototype.querySelect.concat([
                     'Region', 'ParentId'
                 ]),
                 //Implement a minimal function for our custom action.
@@ -340,7 +426,7 @@ define('Mobile/Sample/ApplicationModule', [
                         contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
                 },
                 processEntry: function(entry) {
-                    Mobile.SalesLogix.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
+                    AccountDetail.superclass.processEntry.apply(this, arguments);
                     if (entry && entry['ParentId'])
                     {
                         this.requestParentAccount(entry['ParentId']);
@@ -365,9 +451,9 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
-            lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
+            lang.extend(AccountEdit, {
                 // Add properties to the SData query for Account Edit mode
-                querySelect: Mobile.SalesLogix.Views.Account.Edit.prototype.querySelect.concat([
+                querySelect: AccountEdit.prototype.querySelect.concat([
                     'ParentId'
                 ])
             });
@@ -388,9 +474,9 @@ define('Mobile/Sample/ApplicationModule', [
         },
         registerContactCustomizations: function() {
             //Override the list view row template in order to show phone #
-            lang.extend(Mobile.SalesLogix.Views.Contact.List, {
+            lang.extend(ContactList, {
                 //First, make sure WorkPhone is included in the SData query.
-                querySelect: Mobile.SalesLogix.Views.Contact.List.prototype.querySelect.concat([
+                querySelect: ContactList.prototype.querySelect.concat([
                     'WorkPhone'
                 ]),
                 itemTemplate: new Simplate([
@@ -458,12 +544,12 @@ define('Mobile/Sample/ApplicationModule', [
 
                 The following properties are exposed so that you may tailor as needed:
              */
-            lang.mixin(Sage.Platform.Mobile.ErrorManager, {
+            lang.mixin(ErrorManager, {
                 // number of error logs to keep on device, defaults to 10
                 errorCacheSizeMax: 15
             });
 
-            lang.extend(Mobile.SalesLogix.Views.ErrorLog.Detail, {
+            lang.extend(ErrorLogDetail, {
                 // for mobile devices this string will set as the To: field
                 // defaults to empty
                 defaultToAddress: 'techs@super-support.com',

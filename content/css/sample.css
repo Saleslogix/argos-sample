@@ -15,3 +15,89 @@
     color: red;
 }
 
+.toolbar-filter {
+    top: 45px;
+    margin: 0;
+    padding: 0 !important;
+    position: absolute !important;
+    background: #FFF;
+    border: none;
+    border-left: none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+#ticket_list > .scroll-container
+{
+    top: 78px !important;
+}
+
+.toolbar-filter > .filter-seperator
+{
+    width: 12px;
+    height: 33px;
+    display: inline-block;
+    vertical-align: bottom;
+    border: 1px solid #B3B3B3;
+    border-top-width: 0px;
+    border-right-width: 0;
+}
+.toolbar-filter > .filter-seperator > div > span
+{
+    display: none;
+}
+
+.toolbar-filter > .on-auto
+{
+    width: auto;
+    margin: 0;
+    padding: 0px 12px 3px 12px;
+    border-top: none;
+    display: inline-block;
+    border-right-width: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+.toolbar-filter > .on-auto:last-child
+{
+    border-right-width: 1px;
+    -webkit-border-radius: 0px 11px 11px 0px;
+    border-radius: 0px 11px 11px 0px;
+}
+
+.toolbar-filter > .tool-tab
+{
+    background: #E6E6E6;
+    background: -moz-linear-gradient(top, #E6E6E6 0%, #CCC 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E6E6E6), color-stop(100%,#CCC));
+    background: -webkit-linear-gradient(top, #E6E6E6 0%,#CCC 100%);
+    background: -ms-linear-gradient(top, #E6E6E6 0%,#CCC 100%);
+    background: linear-gradient(to bottom, #E6E6E6 0%,#CCC 100%);
+}
+.toolbar-filter > .is-active
+{
+    background-color: #e6e6e6;
+    background-image: linear-gradient(
+        center top,
+        #f2f2f2 0%,
+        #e6e6e6 100%,
+        #cccccc 100%,
+        #e6e6e6 100%
+    );
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #f2f2f2),
+        color-stop(1, #e6e6e6),
+        color-stop(1, #cccccc),
+        color-stop(1, #e6e6e6)
+    );
+    background-image: -moz-linear-gradient(
+        center top,
+        #f2f2f2 0%,
+        #e6e6e6 100%,
+        #cccccc 100%,
+        #e6e6e6 100%
+    );
+}
