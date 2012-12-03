@@ -86,7 +86,7 @@ define('Mobile/Sample/ApplicationModule', [
             this.registerLeadCustomizations();
             this.registerErrorLogCustomizations();
         },
-        registerOpportunityCustomizations: function(){
+        registerOpportunityCustomizations: function() {
             // Add the hash tag "g500k" to see all Opportunities worth more than $500k
             // Hash tags can be combined (uses AND logic) so try out:
             // #open #g500k

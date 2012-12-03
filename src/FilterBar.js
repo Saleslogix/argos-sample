@@ -29,7 +29,7 @@ define('Mobile/Sample/FilterBar', [
         itemType: FilterTab,
         _itemsByGroup: null,
         toggle: function(e, node) {
-            var filter = this._itemsByName[node.id],
+            var filter = this._itemsByName[domAttr.get(node, 'data-filter')],
                 group = this._itemsByGroup[filter.get('group')];
 
             console.log('in toggle', filter, group);
