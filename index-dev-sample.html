@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html>
+<!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="gtie9 modern">
+<!--<![endif]-->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -53,17 +56,28 @@
     <script type="text/javascript" src="../../argos-sdk/libraries/dojo/dojo/dojo.js" data-dojo-config="parseOnLoad:true, async:true"></script>
     <script type="text/javascript">
     require({
-			baseUrl: "./",
-            packages: [
-			{ name: 'dojo', location: '../../argos-sdk/libraries/dojo/dojo' },
-			{ name: 'dijit', location: '../../argos-sdk/libraries/dojo/dijit' },
-			{ name: 'Sage/Platform/Mobile', location: '../../argos-sdk/src' },
-			{ name: 'Mobile/SalesLogix', location: 'src' },
-			{ name: 'Mobile/Sample', location: '../argos-sample/src' },
-			{ name: 'configuration/sample', location: '../argos-sample/configuration' },
-			{ name: 'localization/sample', location: '../argos-sample/localization' }
-			]
-     });
+        baseUrl: "./",
+        packages: [
+            { name: 'dojo', location: '../../argos-sdk/libraries/dojo/dojo' },
+            { name: 'dijit', location: '../../argos-sdk/libraries/dojo/dijit' },
+            { name: 'dojox', location: '../../argos-sdk/libraries/dojo/dojox' },
+            { name: 'snap', location: '../../argos-sdk/libraries/snap', main: 'snap' },
+            { name: 'Sage/Platform/Mobile', location: '../../argos-sdk/src' },
+            { name: 'Mobile/SalesLogix', location: 'src' },
+            { name: 'configuration', location: 'configuration' },
+            { name: 'localization', location: 'localization' },
+            { name: 'Mobile/Sample', location: '../argos-sample/src' },
+            { name: 'configuration/sample', location: '../argos-sample/configuration' },
+            { name: 'localization/sample', location: '../argos-sample/localization' }
+        ],
+        paths: {
+            'Mobile/SalesLogix': './src',
+            'Sage/Platform/Mobile': '../../argos-sdk/src',
+            'Mobile/Sample': '../argos-sample/src',
+            'configuration/sample': '../argos-sample/configuration',
+            'localization/sample': '../argos-sample/localization'
+        }
+    });
     </script>
 
     <script type="text/javascript">
