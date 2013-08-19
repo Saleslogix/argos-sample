@@ -37,3 +37,9 @@ Thumbs.db
 deploy/
 .idea/
 *.patch
+
+# nodejs
+node_modules
+.grunt/
+_SpecRunner.html
+report/junit.xml
