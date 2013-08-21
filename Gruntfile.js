@@ -6,7 +6,7 @@ module.exports = function(grunt) {
                     paths: ['content/css']
                 },
                 files: {
-                    'min/css/sample.min.debug.css': 'content/css/themes/sample.less'
+                    'min/css/themes/sample/sample.min.debug.css': 'content/css/themes/sample.less'
                 }
             },
             production: {
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
                     yuicompress: true
                 },
                 files: {
-                    'min/css/sample.min.css': 'content/css//themes/sample.less'
+                    'min/css/themes/sample/sample.min.css': 'content/css/themes/sample.less'
                 }
             }
         }
