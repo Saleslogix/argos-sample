@@ -288,6 +288,14 @@ define('Mobile/Sample/ApplicationModule', [
                     }
             });
 
+            // Remove the Add Account/Contact option from the left drawer/global menu
+            this.registerCustomization('left_drawer', 'left_drawer', {
+                at: function(row) { 
+                    return row.name === 'AddAccountContactAction';
+                },
+                type: 'remove'
+            });
+
             //Some customizations require extending the view class.
             lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
                 //Localization String
