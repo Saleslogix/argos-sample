@@ -145,19 +145,6 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
-            // Add a custom toolbar item to Account Detail that uses
-            // the associated Edit Views "Update" security role
-            this.registerCustomization('detail/tools', 'account_detail', {
-                at: function(tool){ return tool.id === 'edit'; },
-                type: 'insert',
-                where: 'after',
-                value: {
-                    id: 'customButton',
-                    icon: 'content/images/icons/Hello_World_24.png',
-                    action: 'showHelloWorld',
-                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
-                }
-            });
 
             //Add a quick action to Account Detail
             this.registerCustomization('detail', 'account_detail', {
@@ -185,7 +172,9 @@ define('Mobile/Sample/ApplicationModule', [
 
             //Add a different default value when inserting a new Account
             this.registerCustomization('edit', 'account_edit', {
-                at: function(row) { return row.name == 'WebAddress'; },
+                at: function(row) { 
+                    return row.name == 'WebAddress';
+                },
                 type: 'modify',
                 value: {
                     'default': 'www.default-example.com'
@@ -294,6 +283,22 @@ define('Mobile/Sample/ApplicationModule', [
                     return row.name === 'AddAccountContactAction';
                 },
                 type: 'remove'
+            });
+
+            // Add a custom toolbar item to Account Detail that uses
+            // the associated Edit Views "Update" security role
+            this.registerCustomization('detail/tools', 'account_detail', {
+                at: function(tool){ return tool.id === 'edit'; },
+                type: 'insert',
+                where: 'after',
+                value: {
+                    id: 'customButton',
+                    icon: 'content/images/icons/Hello_World_24.png',
+                    action: 'showHelloWorld',
+                    // Calling App.getViewSecurity will initialize the view and call startup to process the layout.
+                    // Ensure this is called last so customizations are loaded before the layout is processed.
+                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
+                }
             });
 
             //Some customizations require extending the view class.
