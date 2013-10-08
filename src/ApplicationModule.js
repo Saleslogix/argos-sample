@@ -9,7 +9,8 @@ define('Mobile/Sample/ApplicationModule', [
     'dojo/dom-class',
     'Mobile/SalesLogix/Format',
     'Sage/Platform/Mobile/ApplicationModule',
-    'Mobile/Sample/Views/Activity/CompleteProcess'
+    'Mobile/Sample/Views/Activity/CompleteProcess',
+    'Mobile/Sample/Views/Contact/CompleteProcess'
 ], function(
     declare,
     lang,
@@ -18,7 +19,8 @@ define('Mobile/Sample/ApplicationModule', [
     domClass,
     format,
     ApplicationModule,
-    ActivityCompleteProcess
+    ActivityCompleteProcess,
+    ContactCompleteProcess
 ) {
 
     return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
@@ -32,10 +34,12 @@ define('Mobile/Sample/ApplicationModule', [
 
            //Register views for group support
             this.registerView(new ActivityCompleteProcess());
+            this.registerView(new ContactCompleteProcess());
         },
         loadCustomizations: function() {
             this.inherited(arguments);
             this.registerActivityCustomizations();
+            this.registerContactCustomizations();
         },
         registerActivityCustomizations: function() {
             this.registerCustomization('detail', 'activity_detail', {
@@ -78,16 +82,56 @@ define('Mobile/Sample/ApplicationModule', [
 
             lang.extend(Mobile.SalesLogix.Views.Activity.Detail, {
                 navigateToProcess: function(evt) {
-                    var view;
+                    var view, processName;
+                    view = App.getView('contact_completeprocess');
+                    if (view) {
+                        processName = evt.$source.innerText || evt.$source.text || '';
+                        view.show({
+                            key: this.entry.ContactId,
+                            activityEntry: this.entry, 
+                            processCode: processCodes[processName.trim()],
+                            processName: processName.trim(),
+                        });
+                    }
+                }
+            });
+            lang.extend(Mobile.SalesLogix.Views.Activity.Complete, {
+                //setValues: function(values) {
+                //    Mobile.SalesLogix.Views.Activity.Complete.superclass.setValues.apply(this, arguments);
+                //}
+            });
+        },
+        registerContactCustomizations: function() {
+            this.registerCustomization('detail', 'contact_detail', {
+                at: function(row) { return row.action === 'scheduleActivity'; },
+                type: 'insert',
+                where: 'before',
+                value: {
+                    value: '',
+                    label: 'Schedule Process ',
+                    action: 'scheduleProcess'
+                }
+            });
 
-                    view = App.getView('activity_completeprocess');
+            lang.extend(Mobile.SalesLogix.Views.Contact.Detail, {
+                scheduleProcess: function(evt) {
+                    var view;
+                    view = App.getView('activity_edit');
                     if (view) {
                         view.show({
-                            processCode: processCodes[evt.$source.innerText.trim()]
+                            insert: true,
+                            entry: (this.options && this.options.entry) || null,
+                            source: this.options && this.options.source,
+                            activityType: 'atAppointment',
+                            title: 'Sales Appointment',
+                            returnTo: this.options && this.options.returnTo
+                        }, {
+                            returnTo: -1
                         });
                     }
                 }
             });
         }
+
     });
 });

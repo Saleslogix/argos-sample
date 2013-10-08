@@ -14,4 +14,30 @@
 .panel-content > fieldset > .row-error > label {
     color: red;
 }
+.question > div > label, .question > label {
+    position: relative !important;
+    width: 100% !important;
+    text-align: left !important;
+}
+
+.question > div > .text-input {
+    padding: 8px 34px 8px 4px !important;
+    border: 1px solid grey !important;
+}
+
+.question > .toggle, .question > div > .toggle {
+    width: 100px;
+    height: 28px;
+    margin: 3px 0px 3px 4px;
+    position: relative;
+    right: auto;
+}
+
+.question > div > .note-text {
+    height: 4.5em;
+    overflow: hidden;
+    padding-left: 4px;
+    padding-right: 34px;
+     border: 1px solid grey;
+}
 
