@@ -38,6 +38,7 @@ define('Mobile/Sample/ApplicationModule', [
         },
         loadCustomizations: function() {
             this.inherited(arguments);
+            this.registerListCustomizations();
             this.registerActivityCustomizations();
             this.registerContactCustomizations();
         },
@@ -129,6 +130,34 @@ define('Mobile/Sample/ApplicationModule', [
                             returnTo: -1
                         });
                     }
+                }
+            });
+        },
+        registerListCustomizations: function() {
+            lang.extend(Sage.Platform.Mobile.List, {
+                setSearchTerm: function(value) {
+                    if (this.searchWidget) {
+                        var currentValue = this.searchWidget.getSearchExpression();
+                        value =  this.getSearchValue(value, currentValue);
+                        this.searchWidget.set('queryValue', value);
+                    }
+                },
+                getSearchValue: function(value, currentValue) {
+                    var index;
+                    if ((value !== null) || (value !== '')) {
+                       
+                        if ((currentValue == null) || (currentValue === '')) {
+
+                        } else {
+                             if (currentValue.indexOf(value) > -1) {
+                                value = currentValue.replace(value, "");
+                            } else {
+                                value = value + ' ' + currentValue;
+                            }
+                        }
+
+                    }
+                    return value;
                 }
             });
         }
