@@ -9,20 +9,12 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "GroupsList.js",
-          "path": "../src/Views"
+          "text": "CompleteProcess.js",
+          "path": "../src/Views/Activity"
         },
         {
-          "text": "GroupList.js",
-          "path": "../src/Views/Account"
-        },
-        {
-          "text": "GroupList.js",
+          "text": "CompleteProcess.js",
           "path": "../src/Views/Contact"
-        },
-        {
-          "text": "GoogleMap.js",
-          "path": "../src/Views"
         },
         {
           "text": "ApplicationModule.js",
