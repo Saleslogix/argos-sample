@@ -199,6 +199,6 @@ To:
 The argos-sample module will now be part of the Sage SalesLogix Mobile client.
 
 
-[argos-sdk]: https://github.com/Sage/argos-sdk "Argos SDK Source"
-[argos-saleslogix]: https://github.com/SageSalesLogix/argos-saleslogix "Argos SalesLogix Source"
-[argos-sample]: https://github.com/SageSalesLogix/argos-sample "Argos Sample"
+[argos-sdk]: https://github.com/Saleslogix/argos-sdk "Argos SDK Source"
+[argos-saleslogix]: https://github.com/Saleslogix/argos-saleslogix "Argos SalesLogix Source"
+[argos-sample]: https://github.com/Saleslogix/argos-sample "Argos Sample"
