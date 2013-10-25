@@ -1,16 +1,5 @@
-/* Copyright (c) 2010, Sage Software, Inc. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Copyright (c) 1997-2013, SalesLogix, NA., LLC. All rights reserved.
  */
 define('Mobile/Sample/ApplicationModule', [
     'dojo/_base/declare',
@@ -18,475 +7,484 @@ define('Mobile/Sample/ApplicationModule', [
     'dojo/string',
     'dojo/query',
     'dojo/dom-class',
+    'dojo/_base/array',
     'Mobile/SalesLogix/Format',
     'Sage/Platform/Mobile/ApplicationModule',
-    'Mobile/Sample/Views/GroupsList',
-    'Mobile/Sample/Views/Account/GroupList',
-    'Mobile/Sample/Views/Contact/GroupList',
-    'Mobile/Sample/Views/GoogleMap'
+    'Sage/Platform/Mobile/RelatedViewWidget'
+   // 'dojo/_base/connect',
+   //'Mobile/Sample/NavHistoryService',
+   //'Mobile/Sample/Views/NavHistory/NavDashboard'
+
+
 ], function(
     declare,
     lang,
     string,
     query,
     domClass,
+    array,
     format,
-    ApplicationModule,
-    GroupsList,
-    AccountGroupList,
-    ContactGroupList,
-    GoogleMap
+    ApplicationModule
+   // RelatedViewWidget,
+   // connect,
+   // NavHistoryService,
+   // NavHistoryDashboard
 ) {
 
     return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
-        //localization strings
-        regionText: 'region',
-        faxText: 'fax num',
-        helloWorldText: 'Say Hello.',
-        helloWorldValueText: 'Click to show alert.',
-        parentText: 'parent',
-
+          
+        _navHistoryService:null, //nav history service customization
+          
         loadViews: function() {
             this.inherited(arguments);
 
-           //Register views for group support
-            this.registerView(new GroupsList());
-            this.registerView(new AccountGroupList());
-            this.registerView(new ContactGroupList());
-           //Register custom Google Map view
-            this.registerView(new GoogleMap());
+           //Register views 
+            //this.registerView(new NavHistoryDashboard());
+  
         },
         loadCustomizations: function() {
             this.inherited(arguments);
-
-            //We want to add the Groups list view to the default set of home screen views.
-            //Save the original getDefaultviews() function.
-            var originalDefViews = Mobile.SalesLogix.Application.prototype.getDefaultViews;
-            lang.extend(Mobile.SalesLogix.Application, {
-                getDefaultViews: function() {
-                    //Get view array from original function, or default to empty array
-                    var views = originalDefViews.apply(this, arguments) || [];
-                    //Add custom view(s)
-                    views.push('groups_list');
-                    return views;
-                }
-            });
-
-            this.registerAccountCustomizations();
-            this.registerContactCustomizations();
-            this.registerOpportunityCustomizations();
-            this.registerLeadCustomizations();
-            this.registerErrorLogCustomizations();
+           // this.registerActivityCustomizations();
+           // this.registerContactCustomizations();
+           // this.registerNavHistoryServiceCustomizations();
+           // this.registerNavHistoryMetricCustomizations();
         },
-        registerOpportunityCustomizations: function(){
-            // Add the hash tag "g500k" to see all Opportunities worth more than $500k
-            // Hash tags can be combined (uses AND logic) so try out:
-            // #open #g500k
-            // ... to see all Open Opportunities worth $500k or more
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                at: true, // insert anywhere (hash tag queries are not ordered)
-                type: 'insert',
-                value: {
-                    tag: 'g500k',
-                    query: 'SalesPotential gt "500000"'
+        
+
+        //////////////////////////////////////////////////////
+        //Hash tag and Order by Customizations
+        //////////////////////////////////////////////////////
+
+        registerActivityCustomizations: function(){
+            lang.extend(Mobile.SalesLogix.Views.Activity.List, {
+                _orginalOrderBy: null,
+                _osetSearchTerm: Mobile.SalesLogix.Views.Activity.List.prototype.setSearchTerm,
+                setSearchTerm: function(value) {
+                    this._setSortOrder(value);
+                    this._osetSearchTerm(value);
+                },
+                _setSortOrder: function(value) {
+
+                    if (!this._orginalOrderBy) {
+                        this._orginalOrderBy =  this.queryOrderBy;
+                    }
+
+                    if (value === '#today') {
+
+                        if (this.resourceKind === 'userActivities') {
+                            this.queryOrderBy = 'Activity.StartDate asc';
+                        } else {
+                            this.queryOrderBy = 'StartDate asc';
+                        }
+                    }
+                    else {
+                        this.queryOrderBy = this._orginalOrderBy;
+                    }
                 }
+
             });
 
-            // When inserting values you may also pass an array to insert multiple items
-            // This case its adding two hash tags: l500k and g1m for filtering
-            // Opportunities worth less than $500,000 or greater than $1 million
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                at: true, // insert anywhere (hash tag queries are not ordered)
-                type: 'insert',
-                value: [
-                    {
-                        tag: 'l500k',
-                        query: 'SalesPotential lt "500000"'
-                    },{
-                        tag: 'g1m',
-                        query: 'SalesPotential gt "1000000"'
-                    }]
-            });
-
-            // Remove the hash tag "won" from Opportunity List View Search
-            // so if a user types #won it will perform a normal search for "#won"
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                // since we are looking for a particular key use at()
-                // and test for the hash[key] existence
-                at: function(row) { return row['key'] == 'won'; },
-                type: 'remove'
-            });
-
-            // Modify the hash tag "lost" from Opportunity List View Search
-            // to mean Type =  "Product"
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                // use at() to select our hash key
-                at: function(row) { return row['key'] == 'lost'; },
-                type: 'modify',
-                value: {
-                    query: 'Type eq "Product"'
-                }
-            });
         },
-        registerAccountCustomizations: function() {
-            // Add a custom list panel action to Account List that
-            // shows a heart warming message
-            this.registerCustomization('list/actions', 'account_list', {
-                at: function(action){ return action.id === 'callMain'; },
-                type: 'insert',
-                where: 'before',
-                value: {
-                    id: 'customAction',
-                    icon: 'content/images/icons/Hello_World_24.png',
-                    label: this.helloWorldText,
-                    fn: function(action, selection) {
-                        alert(selection.data['$descriptor']+' says "Hello!"');
-                    }
-                }
+
+        //////////////////////////////////////////////////////
+        //Hash tag and Order by Customizations End
+        //////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////
+        // Related View Customizations
+        //////////////////////////////////////////////////////
+
+        registerContactCustomizations: function() {
+            lang.extend(Mobile.SalesLogix.Views.Account.List, {
+                querySelect: Mobile.SalesLogix.Views.Account.List.prototype.querySelect.concat(
+                    'Contacts/NameLF',
+                    'Contacts/Email',
+                    'Contacts/WorkPhone'
+            ),
+
             });
-
-
-            //Add a quick action to Account Detail
-            this.registerCustomization('detail', 'account_detail', {
-                at: function(row) { return row.action == 'addNote'; },
-                type: 'insert',
-                where: 'before',
-                value: {
-                    value: this.helloWorldValueText,
-                    label: this.helloWorldText,
-                    icon: 'content/images/icons/Hello_World_24.png',
-                    action: 'showHelloWorld'
-                }
-            });
-
-            //Add Region to the Account Detail view, right above the Type property
-            this.registerCustomization('detail', 'account_detail', {
-                at: function(row) { return row.name == 'Type'; },
-                type: 'insert',
-                where: 'before',
-                value: {
-                    name: 'Region',
-                    label: this.regionText
-                }
-            });
-
-            //Add a different default value when inserting a new Account
-            this.registerCustomization('edit', 'account_edit', {
-                at: function(row) { 
-                    return row.name == 'WebAddress';
-                },
-                type: 'modify',
-                value: {
-                    'default': 'www.default-example.com'
-                }
-            });
-
-            //Add a different default value (complex) when inserting a new Account
-            this.registerCustomization('edit', 'account_edit', {
-                at: function(row) { return row.name == 'Address'; },
-                type: 'modify',
-                value: {
-                    'default': {
-                        'Description': 'Mailing',
-                        'Country': 'Rigel VII'
-                    }
-                }
-            });
-
-            //Add Region to the Account edit view, and include a validation.
-            this.registerCustomization('edit', 'account_edit', {
-                at: function(row) { return row.name == 'Type'; },
-                type: 'insert',
-                where: 'before',
-                value: {
-                    name: 'Region',
-                    label: this.regionText,
-                    type: 'text',
-                    //You can set the trigger to 'keyup' or 'blur'
-                    validationTrigger: 'blur', //On field exit
-                    validator: {
-                        //Not using the view parameter, but wanted to show
-                        //that it is available.
-                        fn: function(value, field, view) {
-                            //Don't let them change the value. [evil laugh]
-                            return (value != field.originalValue);
-                        },
-                        //Three parameters available for your message:
-                        //{0} = value
-                        //{1} = Field.name
-                        //{2} = Field.label
-                        message: "'${0}' is an invalid value for field '${2}'."
-                    }
-                }
-            });
-
-            //Change label for fax on Account Detail view
-            this.registerCustomization('detail', 'account_detail', {
-                at: function(row) { return row.name == 'Fax'; },
-                type: 'modify',
-                value: {
-                    label: this.faxText
-                }
-            });
-
-            //Hide the Lead Source
-            this.registerCustomization('detail', 'account_detail', {
-                at: function(row) { return row.name == 'LeadSource.Description'; },
-                type: 'remove'
-            });
-
-            //Add a quick action to Account detail to show custom map view
-            this.registerCustomization('detail', 'account_detail', {
-                at: function(row) { return row.action === 'addNote' },
-                type: 'insert',
-                value: {
-                    value: 'Show Map',
-                    label: 'location',
-                    icon: 'content/images/icons/Map_24.png',
-                    action: 'showMap'
-                }
-            });
-
-            // Parent - related Account entity
-            this.registerCustomization('detail', 'account_detail', {
-                at: function(row) { return row.name == 'WebAddress'; },
-                type: 'insert',
-                where: 'before',
-                value: {
-                    name: 'ParentAccount',
-                    label: this.parentText,
-                    cls: 'content-loading',
-                    value: 'loading...'
-                }
-            });
-
-            //Parent Account lookup
-            this.registerCustomization('edit', 'account_edit', {
-                at: function(row) { return row.name == 'WebAddress'; },
-                    type: 'insert',
-                    where: 'before',
-                    value: {
-                        label: this.parentText,
-                        name: 'ParentAccount',
-                        type: 'lookup',
-                        applyTo: '.',
-                        emptyText: '',
-                        valueKeyProperty: 'ParentId',
-                        valueTextProperty: 'ParentAccount.AccountName',
-                        view: 'account_related'
-                    }
-            });
-
-            // Remove the Add Account/Contact option from the left drawer/global menu
-            this.registerCustomization('left_drawer', 'left_drawer', {
-                at: function(row) { 
-                    return row.name === 'AddAccountContactAction';
-                },
-                type: 'remove'
-            });
-
-            // Add a custom toolbar item to Account Detail that uses
-            // the associated Edit Views "Update" security role
-            this.registerCustomization('detail/tools', 'account_detail', {
-                at: function(tool){ return tool.id === 'edit'; },
-                type: 'insert',
-                where: 'after',
-                value: {
-                    id: 'customButton',
-                    icon: 'content/images/icons/Hello_World_24.png',
-                    action: 'showHelloWorld',
-                    // Calling App.getViewSecurity will initialize the view and call startup to process the layout.
-                    // Ensure this is called last so customizations are loaded before the layout is processed.
-                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
-                }
-            });
-
-            //Some customizations require extending the view class.
-            lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
-                //Localization String
-                helloWorldAlertText: 'Hello World!',
-
-                //Add Region property to the SData query for the Account Detail view
-                querySelect: Mobile.SalesLogix.Views.Account.Detail.prototype.querySelect.concat([
-                    'Region', 'ParentId'
-                ]),
-                //Implement a minimal function for our custom action.
-                showHelloWorld: function() {
-                    alert(this.helloWorldAlertText);
-                },
-
-                requestParentAccount: function(parentId)
-                {
-
-                    var request = new Sage.SData.Client.SDataSingleResourceRequest(this.getService())
-                        .setResourceKind('accounts')
-                        .setResourceSelector(string.substitute("'${0}'", [parentId]))
-                        .setQueryArg('select', 'AccountName');
-
-                    request.allowCacheUse = true;
-                    request.read({
-                        success: this.processParentAccount,
-                        failure: this.processParentAccountFailure,
-                        scope: this
-                    });
-
-                },
-                processParentAccountFailure: function(xhr, o) {
-                    this.updateParentAccountDisplay();
-                },
-                processParentAccount: function(parentEntry) {
-                    if (parentEntry)
-                    {
-                        this.entry['ParentAccount'] = parentEntry;
-                        this.updateParentAccountDisplay();
-                    }
-
-                },
-                updateParentAccountDisplay: function() {
-                    var rowNode = query('[data-property="ParentAccount"]', this.domNode)[0],
-                        contentNode = rowNode && query('span', rowNode)[0];
-
-                    if (rowNode)
-                        domClass.remove(rowNode, 'content-loading');
-
-                    if (contentNode)
-                        contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
-                },
-                processEntry: function(entry) {
-                    Mobile.SalesLogix.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
-                    if (entry && entry['ParentId'])
-                    {
-                        this.requestParentAccount(entry['ParentId']);
-                    }
-                    else
-                    {
-                        this.updateParentAccountDisplay();
-                    }
-
-                },
-                //Add a supporting action for displaying the map view.
-                showMap: function() {
-                    var view = App.getView('googlemapview');
-                    if (view)
-                        view.show({
-                            key: this.options.key,
-                            entity: 'Account',
-                            address: format.address(this.entry['Address'], true, ' '),
-                            markerTitle: this.entry['AccountName'],
-                            entry: this.entry
-                        });
-                }
-            });
-
-            lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
-                // Add properties to the SData query for Account Edit mode
-                querySelect: Mobile.SalesLogix.Views.Account.Edit.prototype.querySelect.concat([
-                    'ParentId'
-                ])
-            });
-
-            // Adds a #hash tag query to the Account List View Search
-            // Shows you can pass a dynamic query to a hash tag
-            // in this case it uses the current users ID/key
-            this.registerCustomization('list/hashTagQueries', 'account_list', {
+            this.registerCustomization('list/relatedViews', 'account_list', {
                 at: true,
                 type: 'insert',
+                where: 'before',
                 value: {
-                    tag: 'mine',
-                    query: function() {
-                        return string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
+                    widgetType: RelatedViewWidget,
+                    id: 'account_relatedContacts',
+                    icon: 'content/images/icons/journal_24.png',
+                    title: 'Contacts',
+                    detailViewId: 'contact_detail',
+                    listViewId: 'contact_related',
+                    parentCollection: true,
+                    parentCollectionProperty: "Contacts",
+                    autoLoad: true,
+                    enabled: true,
+                    enableActions: false,
+                    relatedItemDetailTemplate: new Simplate([
+                         '<div>',
+                            '<h3>{%: $.NameLF %}</h3>',
+                            '<h4>{%: Sage.Platform.Mobile.Format.phone($.WorkPhone) %}</h4>',
+                            '<h4></h4>',
+                         '</div>'
+                    ]),
+                    realtedData: function(entry) { return [entry] }
+                }
+            });
+        },
+
+        //////////////////////////////////////////////////////
+        // Related View Customizations End
+        //////////////////////////////////////////////////////
+
+
+        //////////////////////////////////////////////////////
+        // Nav History Service Customizations
+        //////////////////////////////////////////////////////
+        registerNavHistoryServiceCustomizations: function(){
+
+            this._navHistoryService = new NavHistoryService();
+
+            lang.extend(Mobile.SalesLogix.Views.Account.List, {
+                _oshow: Mobile.SalesLogix.Views.Account.List.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+                    data = this.getContext();
+                    navContext = {
+                        Area:"View",
+                        Category: "List",
+                        Subject: "Account",
+                        EntityType: "Account",
+                        EntityId: "",
+                        Description: "Account List",
+                        ViewName: "Account List",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
+                _oshow: Mobile.SalesLogix.Views.Account.Detail.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "Detail",
+                        Subject: "Account",
+                        EntityType: "Account",
+                        EntityId: data.key,
+                        Description: data.descriptor,
+                        ViewName: "Account Detail",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            /*
+            lang.extend(Mobile.SalesLogix.Views.Contact.List, {
+                _oshow: Mobile.SalesLogix.Views.Contact.List.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+                    data = this.getContext();
+                    var navContext = {
+                        Area: "View",
+                        Category: "List",
+                        Subject: "Contact",
+                        EntityType: "Contact",
+                        EntityId: "",
+                        Description: "Contact List",
+                        ViewName: "Contact List",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+
+            lang.extend(Mobile.SalesLogix.Views.Contact.Detail, {
+                _oshow: Mobile.SalesLogix.Views.Contact.Detail.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "Detail",
+                        Subject: "Contact",
+                        EntityType: "Contact",
+                        EntityId: data.key,
+                        Description: data.descriptor,
+                        ViewName: "Contact Detail",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            */
+            /*
+            lang.extend(Mobile.SalesLogix.Views.Lead.List, {
+                _oshow: Mobile.SalesLogix.Views.Lead.List.prototype.show,
+                show: function(options, transitionOptions) {
+                    this._oshow(options, transitionOptions);
+                    var navContext = {
+                        Area: "View",
+                        Category: "List",
+                        Subject: "Lead",
+                        EntityType: "Lead",
+                        EntityId: "",
+                        Description: "Lead List",
+                        ViewName: "Lead List",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            lang.extend(Mobile.SalesLogix.Views.Lead.Detail, {
+                _oshow: Mobile.SalesLogix.Views.Lead.Detail.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "Detail",
+                        Subject: "Lead",
+                        EntityType: "Lead",
+                        EntityId: data.key,
+                        Description: data.descriptor,
+                        ViewName: "Lead Detail",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            */
+            /*
+            lang.extend(Mobile.SalesLogix.Views.Opportunity.List, {
+                _oshow: Mobile.SalesLogix.Views.Opportunity.List.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "List",
+                        Subject: "Opportunity",
+                        EntityType: "Opprtunity",
+                        EntityId: data.key,
+                        Description: "Opportunity List",
+                        ViewName: "Opportunity List",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+           
+            lang.extend(Mobile.SalesLogix.Views.Opportunity.Detail, {
+                _oshow: Mobile.SalesLogix.Views.Opportunity.Detail.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "Detail",
+                        Subject: "Opportunity",
+                        EntityType: "Opprtunity",
+                        EntityId: data.key,
+                        Description: data.descriptor,
+                        ViewName: "Opportunity Detail",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            */
+            /*
+            lang.extend(Mobile.SalesLogix.Views.Ticket.List, {
+                _oshow: Mobile.SalesLogix.Views.Ticket.List.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "List",
+                        Subject: "Ticket",
+                        EntityType: "Ticket",
+                        EntityId: data.key,
+                        Description: "Ticket List",
+                        ViewName: "Ticket List",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+          
+            lang.extend(Mobile.SalesLogix.Views.Ticket.Detail, {
+                _oshow: Mobile.SalesLogix.Views.Ticket.Detail.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "Detail",
+                        Subject: "Ticket",
+                        EntityType: "Ticket",
+                        EntityId: data.key,
+                        Description: data.descriptor,
+                        ViewName: "Tickit Detail",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            */
+            /*
+            lang.extend(Mobile.SalesLogix.Views.History.List, {
+                _oshow: Mobile.SalesLogix.Views.History.List.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "List",
+                        Subject: "History",
+                        EntityType: "History",
+                        EntityId: data.key,
+                        Description: "History List",
+                        ViewName: "History List",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+
+            lang.extend(Mobile.SalesLogix.Views.History.Detail, {
+                _oshow: Mobile.SalesLogix.Views.History.Detail.prototype.show,
+                show: function(options, transitionOptions) {
+                    var data, navContext;
+                    this._oshow(options, transitionOptions);
+
+                    data = this.getContext();
+                    navContext = {
+                        Area: "View",
+                        Category: "Detail",
+                        Subject: "History",
+                        EntityType: "History",
+                        EntityId: data.key,
+                        Description: data.descriptor,
+                        ViewName: "History Detail",
+                        data: data
+                    };
+                    connect.publish('/app/navhistory', [navContext]);
+                }
+            });
+            */
+        },
+        
+        //////////////////////////////////////////////////////
+        // Nav History Service Customizations End
+        //////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////
+        // Nav History Metric Customizations
+        //////////////////////////////////////////////////////
+        
+        registerNavHistoryMetricCustomizations: function() {
+
+            lang.extend(Mobile.SalesLogix.Application, {
+
+                _ogetDefaultViews: Mobile.SalesLogix.Application.prototype.getDefaultViews,
+                getDefaultViews: function(){
+                    var defaultViews = this._ogetDefaultViews();
+                    defaultViews.push('navhistory_dashboard');
+                    return defaultViews;
+                },
+
+                _osetDefaultMetricPreferences: Mobile.SalesLogix.Application.prototype.setDefaultMetricPreferences,
+                setDefaultMetricPreferences: function() {
+                    var visitedMetric;
+                    this._osetDefaultMetricPreferences();
+                    visitedMetric = {
+                            metricId: "NavHistoryVisited",
+                            title: "Visited",
+                            resourceKind: "navHistories",
+                            entityName: "NavHostory",
+                            currentSearchExpression:'',
+                            queryName:"executeMetric",
+                            queryArgs:{
+                                _filterName:"Description",
+                                _metricName:"NavCount"
+                            },
+                            metricDisplayName:"Visted",
+                            filterDisplayName:"Visted",
+                            chartType:"bar",
+                            aggregate:"sum",
+                            formatter:"bigNumber",
+                            enabled:false
+                     }
+
+                    this._addMetric("accounts", visitedMetric);
+                    this._addMetric("contacts", visitedMetric);
+                    this._addMetric("leads", visitedMetric);
+                    this._addMetric("opportunities", visitedMetric);
+                    this._addMetric("history", visitedMetric);
+                    this._addMetric("tickets", visitedMetric);
+
+
+                },
+                _addMetric:function(kind, metric){
+                    if (this.preferences.metrics[kind]) {
+                        var found = false;
+                        array.forEach(this.preferences.metrics[kind], function(currentMetric) {
+                            if (currentMetric && currentMetric.metricId === metric.metricId) {
+                                found = true;
+                            }
+                        }, this);
+                        if (!found) {
+                            this.preferences.metrics[kind].push(metric);
+                            this.persistPreferences();
+                        }
+                    } else {
+                        this.preferences.metrics[kind] = [metric];
+                    }
+                }
+
+            });
+
+             lang.extend(Mobile.SalesLogix.Views.MetricWidget, {
+                postCreate: function(options) {
+                    if (this.metricId === 'NavHistoryVisited') {
+                        //this.queryArgs._activeFilter = "CreateUser eq '" + App.context.user.$key + "' and  ViewId eq   '" + this.returnToId + "'";
+                        this.queryArgs._activeFilter = "CreateUser eq '" + App.context.user.$key + "' and  Category eq 'Detail' and ResourceKind eq   '" + this.parentResourceKind + "'";
                     }
                 }
             });
-        },
-        registerContactCustomizations: function() {
-            //Override the list view row template in order to show phone #
-            lang.extend(Mobile.SalesLogix.Views.Contact.List, {
-                //First, make sure WorkPhone is included in the SData query.
-                querySelect: Mobile.SalesLogix.Views.Contact.List.prototype.querySelect.concat([
-                    'WorkPhone'
-                ]),
-                itemTemplate: new Simplate([
-                    '<h3>{%: $.NameLF %}</h3>',
-                    '<h4>{%: $.AccountName %}</h4>',
-                    '<h4>{%: Mobile.SalesLogix.Format.phone($.WorkPhone, false) %}</h4>'
-                ])
-            });
 
-            // Here we add a tool with its own custom security
-            // Admin user can access everything, others have to match the security string
-            // from the securedActions for user role returned via sdata after login
-            // this one is shown on Contact List
-            this.registerCustomization('list/tools', 'contact_list', {
-                at: function(tool) { return tool.id === 'new' },
-                type: 'insert',
-                where: 'after',
-                value: {
-                    security: 'Entities/Contact/CustomAction',
-                    id: 'custom-action',
-                    icon: 'content/images/icons/Contacts_24x24.png',
-                    fn: function() { alert('We have clearance to this Secured Action!'); }
-                }
-            });
-        },
-        registerLeadCustomizations: function() {
-
-            //Change Notes on Lead Edit view to use Signature control
-            var signatureText = 'signature';
-            this.registerCustomization('edit', 'lead_edit', {
-                at: function(row) { return row.name == 'Notes'; },
-                type: 'modify',
-                value: {
-                    label: signatureText,
-                    type: 'signature',
-                    view: 'signature_edit'
-                }
-            });
-
-            // Display Signature in place of Notes on Lead Detail view
-            this.registerCustomization('detail', 'lead_detail', {
-                at: function(row) { return row.name == 'Notes'; },
-                type: 'modify',
-                value: {
-                    label: signatureText,
-                    property: 'Notes',
-                    renderer: format.imageFromVector.bindDelegate(
-                        this,
-                        {
-                            penColor: 'blue',
-                            lineWidth:     1,
-                            width:       180,
-                            height:       50
-                        },
-                        true // return HTML <img>
-                    )
-                }
-            });
-        },
-        registerErrorLogCustomizations: function(){
-            /*
-                When a server error occurs the server response is parsed and saved to localStorage (and in current session memory)
-                A user may then go to Settings -> View Error Logs and see the last 10 errors
-                The Detail view of an error log contains either an email button (mobile devices) or copy to clipboard button (desktops).
-
-                The following properties are exposed so that you may tailor as needed:
-             */
-            lang.mixin(Sage.Platform.Mobile.ErrorManager, {
-                // number of error logs to keep on device, defaults to 10
-                errorCacheSizeMax: 15
-            });
-
-            lang.extend(Mobile.SalesLogix.Views.ErrorLog.Detail, {
-                // for mobile devices this string will set as the To: field
-                // defaults to empty
-                defaultToAddress: 'techs@super-support.com',
-
-                // for mobile devices this string will be set as the Subject: field
-                emailSubjectText: 'SLXMobile Error Report',
-
-                // for desktops the message to display when it is copied to clipboard
-                copiedSuccessText: 'Error Report copied to clipboard'
-            });
+            
+            
         }
+        
+        //////////////////////////////////////////////////////
+        // Nav History Metric Customizations End
+        //////////////////////////////////////////////////////
+
+
+
+
+
+
     });
 });
