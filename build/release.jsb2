@@ -24,6 +24,14 @@
           "text": "GoogleMap.js",
           "path": "../src/Views"
         },
+		{
+          "text": "NavDashboard.js",
+          "path": "../src/Views/NavHistory"
+        },
+		{
+          "text": "NavHistoryService.js",
+          "path": "../src"
+        },
         {
           "text": "ApplicationModule.js",
           "path": "../src"
