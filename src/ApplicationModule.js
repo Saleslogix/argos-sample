@@ -301,6 +301,33 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            lang.extend(Mobile.SalesLogix.Views.Account.List, {
+                // Add the account manager's email to the list view
+                querySelect: Mobile.SalesLogix.Views.Account.List.prototype.querySelect.concat([
+                    'AccountManager/UserInfo/Email'
+                ]),
+                itemTemplate: new Simplate([
+                    '<h3>{%: $.AccountName %}</h3>',
+                    '<h4>{%: $.Industry %}</h4>',
+                    '<h4>',
+                        '{%: $$.joinFields(" | ", [$.Type, $.SubType]) %}',
+                    '</h4>',
+                    '<h4>{%: $.AccountManager && $.AccountManager.UserInfo ? $.AccountManager.UserInfo.UserName : "" %} | {%: $.Owner.OwnerDescription %}</h4>',
+                    '<h4>{%: $.WebAddress %}</h4>',
+                    '<h4>{%: $.AccountManager && $.AccountManager.UserInfo ? $.AccountManager.UserInfo.Email : "" %}</h4>',
+                    '{% if ($.MainPhone) { %}',
+                        '<h4>',
+                            '{%: $$.phoneAbbreviationText + Sage.Platform.Mobile.Format.phone($.MainPhone) %}',
+                        '</h4>',
+                    '{% } %}',
+                    '{% if ($.Fax) { %}',
+                        '<h4>',
+                            '{%: $$.faxAbbreviationText + Sage.Platform.Mobile.Format.phone($.Fax) %}',
+                        '</h4>',
+                    '{% } %}'
+                ])
+            });
+
             //Some customizations require extending the view class.
             lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
                 //Localization String
