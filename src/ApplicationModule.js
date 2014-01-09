@@ -129,6 +129,23 @@ define('Mobile/Sample/ApplicationModule', [
             });
         },
         registerAccountCustomizations: function() {
+            // Add a quick action for navigating to a related view
+            this.registerCustomization('list/actions', 'account_list', {
+                at: function(action){ return action.id === 'callMain'; },
+                type: 'insert',
+                where: 'before',
+                value: {
+                    id: 'customAction1',
+                    icon: 'content/images/icons/Opportunities_24x24.png',
+                    label: 'Opportunities',
+                    fn: function(action, selection) {
+                        // Get a reference to the navigateToRelatedView function in the base List
+                        var nav = Mobile.SalesLogix.Views.Account.List.prototype.navigateToRelatedView;
+                        nav.call(this, action, selection, 'opportunity_related', 'Account.id eq "${0}"');
+                    }
+                }
+            });
+
             // Add a custom list panel action to Account List that
             // shows a heart warming message
             this.registerCustomization('list/actions', 'account_list', {
@@ -136,7 +153,7 @@ define('Mobile/Sample/ApplicationModule', [
                 type: 'insert',
                 where: 'before',
                 value: {
-                    id: 'customAction',
+                    id: 'customAction2',
                     icon: 'content/images/icons/Hello_World_24.png',
                     label: this.helloWorldText,
                     fn: function(action, selection) {
