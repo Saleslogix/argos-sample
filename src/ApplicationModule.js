@@ -246,7 +246,7 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
-            //Hide the Lead Source
+            //Remove the Lead Source
             this.registerCustomization('detail', 'account_detail', {
                 at: function(row) { return row.name == 'LeadSource.Description'; },
                 type: 'remove'
