@@ -72,11 +72,20 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            this.registerKPICustomizations();
             this.registerAccountCustomizations();
             this.registerContactCustomizations();
             this.registerOpportunityCustomizations();
             this.registerLeadCustomizations();
             this.registerErrorLogCustomizations();
+        },
+        registerKPICustomizations: function() {
+            this.registerCustomization('metrics/definitions', 'default_metrics', {
+                at: function(row) {
+                    return row && row.queryArgs && row.queryArgs._metricName === 'AverageTimeAsCustomer';
+                },
+                type: 'remove'
+            });
         },
         registerOpportunityCustomizations: function(){
             // Add the hash tag "g500k" to see all Opportunities worth more than $500k
