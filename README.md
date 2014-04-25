@@ -32,14 +32,14 @@ This sample module was designed to show how you can add customizations to an exi
 
 2\.	change to the base directory where you cloned [Argos SDK][argos-sdk], eg:
 
-		cd \projects\sage\mobile
+		cd \projects\mobile
 		
 3\.	Execute the following commands (clone command shown with READ-ONLY URL; if you have commit rights, use the appropriate Read+Write URL).
 
 		cd products
-		git clone git://github.com/SageSalesLogix/argos-sample.git
+		git clone git://github.com/Saleslogix/argos-sample.git
 
-    __Note:__ If you're downloading and extracting the zip file instead of using git directly, the top-level folder in your download will probably be named something like "SageSalesLogix-argos-sample-nnnnn". You'll want to rename this folder to argos-sample, and put it under your products sub-folder. You'll end up with a folder structure like this:
+    __Note:__ If you're downloading and extracting the zip file instead of using git directly, the top-level folder in your download will probably be named something like "Saleslogix-argos-sample-nnnnn". You'll want to rename this folder to argos-sample, and put it under your products sub-folder. You'll end up with a folder structure like this:
 
         ...\mobile\argos-sdk
         ...\mobile\products\argos-sample
@@ -102,7 +102,7 @@ Example:
 {
     "name": "sample",
     "displayName": "Sample Customizations",
-    "description": "A sample module implementation that shows how to customize the Sage SalesLogix Mobile client.",
+    "description": "A sample module implementation that shows how to customize the SalesLogix Mobile client.",
     "majorVersion": 1,
     "minorVersion": 1,
     "buildNumber": 0,
@@ -133,7 +133,7 @@ Example:
 
 2\.	Open a command prompt and execute the following, changing paths as appropriate, eg:
 
-        cd \projects\sage\mobile
+        cd \projects\mobile
         build-module sample
 
 3\.	The deployed module will be in a `deploy` folder in the directory where you cloned [argos-sample][argos-sample].
@@ -196,7 +196,7 @@ To:
 
 #### Finished
 
-The argos-sample module will now be part of the Sage SalesLogix Mobile client.
+The argos-sample module will now be part of the Saleslogix Mobile client.
 
 
 [argos-sdk]: https://github.com/Saleslogix/argos-sdk "Argos SDK Source"
