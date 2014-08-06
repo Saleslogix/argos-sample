@@ -23,7 +23,11 @@ define('Mobile/Sample/ApplicationModule', [
     'Mobile/Sample/Views/GroupsList',
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
-    'Mobile/Sample/Views/GoogleMap'
+    'Mobile/Sample/Views/GoogleMap',
+    'Mobile/Sample/Views/Picklist/List',
+    'Mobile/Sample/Views/Picklist/Detail',
+    'Mobile/Sample/Views/Picklist/Edit',
+    'Mobile/Sample/Views/Picklist/Item'
 ], function(
     declare,
     lang,
@@ -35,7 +39,11 @@ define('Mobile/Sample/ApplicationModule', [
     GroupsList,
     AccountGroupList,
     ContactGroupList,
-    GoogleMap
+    GoogleMap,
+    PicklistList,
+    PicklistDetail,
+    PicklistEdit,
+    PicklistItem
 ) {
 
     return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
@@ -45,6 +53,8 @@ define('Mobile/Sample/ApplicationModule', [
         helloWorldText: 'Say Hello.',
         helloWorldValueText: 'Click to show alert.',
         parentText: 'parent',
+        picklistText: 'Picklist Edit',
+        picklistView: 'picklist_list',
 
         loadViews: function() {
             this.inherited(arguments);
@@ -55,6 +65,11 @@ define('Mobile/Sample/ApplicationModule', [
             this.registerView(new ContactGroupList());
            //Register custom Google Map view
             this.registerView(new GoogleMap());
+            //Register custom Picklist views
+            this.registerView(new PicklistList({ id: 'picklist_list' }));
+            this.registerView(new PicklistDetail({ id: 'picklist_detail' }));
+            this.registerView(new PicklistEdit({ id: 'picklist_edit' }));
+            this.registerView(new PicklistItem({ id: 'picklist_item' }));
         },
         loadCustomizations: function() {
             this.inherited(arguments);
@@ -78,6 +93,7 @@ define('Mobile/Sample/ApplicationModule', [
             this.registerOpportunityCustomizations();
             this.registerLeadCustomizations();
             this.registerErrorLogCustomizations();
+            this.registerPicklistCustomizations();
         },
         registerKPICustomizations: function() {
             this.registerCustomization('metrics/definitions', 'default_metrics', {
@@ -539,6 +555,29 @@ define('Mobile/Sample/ApplicationModule', [
 
                 // for desktops the message to display when it is copied to clipboard
                 copiedSuccessText: 'Error Report copied to clipboard'
+            });
+        },
+        registerPicklistCustomizations: function () {
+            // Add the Picklist Edit customization to the left_drawer (Global Menu)
+            this.registerCustomization('left_drawer', 'left_drawer', {
+                at: function (row) {
+                    return row.name === 'SettingsAction';
+                },
+                type: 'insert',
+                where: 'before',
+                value: {
+                    tag: 'footer',
+                    action: 'navigateToPicklistListView',
+                    name: 'Logout',
+                    title: this.picklistText
+                }
+            }); 
+
+            lang.extend(Mobile.SalesLogix.Views.LeftDrawer, {
+                navigateToPicklistListView: function () {
+                    var view = App.getView('picklist_list');
+                    this.navigateToView(view);
+                }
             });
         }
     });

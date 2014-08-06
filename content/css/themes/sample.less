@@ -3,7 +3,98 @@
 
 // Override toolbar color
 // See the variables.less file for what to override (argos-sdk/content/css/themes/swiftpage/variables.less)
-@toolbar-bg-color: #faa1a9;
+// @toolbar-bg-color: #faa1a9;
+
+.viewContainer > .toolbar, .toolbar {
+    position: fixed;
+}
+
+#picklist_detail
+{
+	background-color: #ebebeb;
+	.panel-content
+    {
+		background-color: #ebebeb;
+		
+		h2, .row
+		{
+			margin-bottom: 6px;
+			background-color: #ffffff;
+			font-size: 1em;
+		}
+		
+		.row
+		{
+			line-height: 1em;
+		}
+	
+        h3
+        {
+            padding: 8px 6px 8px 6px;
+            background-color: #fff;
+            font-weight: normal;
+        }
+    }
+}
+
+#picklist_edit {
+    top: 0px;
+
+    .scroller {
+        //top: 40px;
+    }
+
+    .list-item-selector {
+        top: 0px;
+        height: 100%;
+        right: 6px;
+    }
+
+    .list-content {
+        > li {
+            padding-right: 6px;
+
+            .drag-item-button {
+                position: absolute;
+                right: 6px;
+                background: none;
+                border-left: 1px solid #ebebeb;
+                border-right: 1px solid #ebebeb;
+                padding: 0px 2px 0px 0px;
+                height: 100%;
+                top: 0;
+                width: 40px;
+            }
+
+            .resource {
+                display: block;
+                margin: -8px 0 -8px -10px;
+                padding: 8px 32px 8px 36px;
+            }
+
+            h3 {
+                > span {
+                    &:first-child {
+                        float: left;
+                    }
+                }
+
+                > .icon {
+                    opacity: 0.5;
+                    margin-right: .2em;
+                }
+            }
+        }
+
+            > li.list-item-selected {
+                color: #000;
+
+                h3 > .icon {
+                    opacity: 1.0;
+                }
+            }
+    }
+}
 
 // You can pick and choose what theme files to use as an alterative:
 //@import "../../../../argos-sdk/content/css/themes/swiftpage/variables.less";
