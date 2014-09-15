@@ -44,23 +44,12 @@
     <!-- JSON -->
     <script type="text/javascript" src="../../argos-sdk/libraries/json2.js"></script>
 
-    <!-- ReUI -->
-    <script type="text/javascript">
-    reConfig = {
-        autoInit: false,
-        legacyMode: false,
-        showInitialPage: false,
-        updateBackButtonText: false
-    };
-    </script>
-    <script type="text/javascript" src="../../argos-sdk/libraries/reui/reui.js"></script>
-
     <!-- SData Client Library -->
     <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-dependencies-debug.js"></script>
     <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-debug.js"></script>
 
     <!-- Moment.js -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../../argos-sdk/libraries/moment/moment-with-langs.min.js"></script>
 
     <!-- Simplate -->
     <script type="text/javascript" src="../../argos-sdk/libraries/Simplate.js"></script>
@@ -70,6 +59,9 @@
 
     <!-- canvas2image for when HTMLCanvasElement.prototype.toDataURL doesn't work -->
     <script type="text/javascript" src="../../argos-sdk/libraries/canvas2image.js"></script>
+
+    <!-- Deep Diff -->
+    <script type="text/javascript" src="../../argos-sdk/libraries/deep-diff/deep-diff-0.2.0.min.js"></script>
 
     <!-- Google Maps -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -84,7 +76,7 @@
             { name: 'dijit', location: '../../argos-sdk/libraries/dojo/dijit' },
             { name: 'dojox', location: '../../argos-sdk/libraries/dojo/dojox' },
             { name: 'snap', location: '../../argos-sdk/libraries/snap', main: 'snap' },
-            { name: 'moment', location: '../../argos-sdk/libraries/moment', main: 'moment' },
+            { name: 'moment', location: '../../argos-sdk/libraries/moment', main: 'moment-with-langs.min' },
             { name: 'Sage/Platform/Mobile', location: '../../argos-sdk/src' },
             { name: 'Mobile/SalesLogix', location: 'src' },
             { name: 'configuration', location: 'configuration' },
