@@ -194,6 +194,8 @@ To:
             ];
 ```
 
+5\. Files from the deploy folder need to be referenced in the manifest.appcache if your users save the application to their homescreen (IOS)
+
 #### Finished
 
 The argos-sample module will now be part of the Saleslogix Mobile client.
