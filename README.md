@@ -126,27 +126,30 @@ Example:
 
 #### Requirements
 *	Windows
+*	[NodeJS](https://nodejs.org/download/)
+*	Grunt (see the getting started [guide](http://gruntjs.com/getting-started))
 
 #### Steps
 
-1\.	Save this [gist](https://gist.github.com/815451) as `build-module.cmd` to the directory where you cloned [Argos SDK][argos-sdk] (The same folder where you created the Products folder).
+1\.	Edit the Gruntfile.js in products/argos-saleslogix, add the product name (argos-sample) to the products configuration under grunt.initConfig. The basePath property is relative to products/argos-saleslogix
 
-2\.	Open a command prompt and execute the following, changing paths as appropriate, eg:
+2\.	Open a command prompt and execute the following:
 
-        cd \projects\mobile
-        build-module sample
+        cd products/argos-saleslogix
+        npm install
+        grunt release
 
-3\.	The deployed module will be in a `deploy` folder in the directory where you cloned [argos-sample][argos-sample].
+3\.	The deployed application will be in a `deploy` folder in products/argos-saleslogix. This will include all products specified in the products/argos-saleslogix/Gruntfile.js configuration
 
 ### Deploying
 
 #### Setup
 
-1\.	Open the deploy folder for the product, eg:
+1\.	Open the deploy folder, eg:
 
-		mobile\products\argos-sample\deploy
+		mobile\products\argos-saleslogix\deploy
 
-2\. Copy all the folders within `deploy\argos-sample` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
+2\. Copy all the folders within `deploy` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
 
 3\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier, this file is not copied into the deploy folder so look for it in your normal dev directory) into each file at the designated modules marker:
 
@@ -193,8 +196,6 @@ To:
                 'localization/sample/en'
             ];
 ```
-
-5\. Files from the deploy folder need to be referenced in the manifest.appcache if your users save the application to their homescreen (IOS)
 
 #### Finished
 
