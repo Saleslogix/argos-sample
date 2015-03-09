@@ -122,7 +122,7 @@ Example:
 
 4\. If you are deploying using AA 8.0+ then all you need to do now is within AA right click on CustomModules in the SLXMobile portal and choose Add Custom Module. Then browse to the `module-info.json` file and hit okay. AA will handle building, minifying, editing the index files and enabling you to select/deselect modules as needed. Make sure to save and re-deploy after any changes.
 
-5\. If you are not using AA 8.0+ to deploy then please continue.
+5\. If you need an offline app manifest, or if you are not using AA 8.0+ to deploy then please continue.
 
 #### Requirements
 *	Windows
