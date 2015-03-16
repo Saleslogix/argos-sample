@@ -138,6 +138,38 @@ define('Mobile/Sample/ApplicationModule', [
             });
         },
         registerAccountCustomizations: function() {
+
+            // Register an error handler on account_list that will log to console.
+            this.registerCustomization('list/errorHandlers', 'account_list', {
+                at: true,
+                type: 'insert',
+                value: {
+                    name: 'AccountListCustom',
+                    test: function(error) {
+                        return true;
+                    },
+                    handle: function(error, next) {
+                        error.message = 'Error message handled from customization: ' + error.message;
+                        console.error(error.message);
+                        next();
+                    }
+                }
+            });
+
+            // Test the above error handler
+            this.registerCustomization('list/actions', 'account_list', {
+                at: true,
+                type: 'insert',
+                where: 'before',
+                value: {
+                    id: 'testErrorHandler',
+                    label: 'Test Error Handler',
+                    fn: function(action, selection) {
+                        this.handleError(new Error('Testing the error handler'));
+                    }
+                }
+            });
+
             // Add a quick action for navigating to a related view
             this.registerCustomization('list/actions', 'account_list', {
                 at: function(action){ return action.id === 'callMain'; },
