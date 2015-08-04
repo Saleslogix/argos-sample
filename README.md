@@ -15,7 +15,6 @@ This sample module was designed to show how you can add customizations to an exi
 *  Add a custom view that derives from the base view type (Google Map view)
 *  Example of overriding CSS styling (sample.css)
 *  A rudimentary Groups implementation using the Groups SData endpoint (GroupsList.js)
-*  Show how to add a custom view (groups_list) to the "default" set of views displayed on the home screen.
 *  Example of handling a self-join where only the ID is available (Parent in Account Detail/Edit)
 *  Inserting and modifying hash tags for List View searches
 *  Example of performing multiple customizations with a single customization call
