@@ -230,7 +230,7 @@ define('Mobile/Sample/ApplicationModule', [
 
             //Add a different default value when inserting a new Account
             this.registerCustomization('edit', 'account_edit', {
-                at: function(row) { 
+                at: function(row) {
                     return row.name == 'WebAddress';
                 },
                 type: 'modify',
@@ -337,7 +337,7 @@ define('Mobile/Sample/ApplicationModule', [
 
             // Remove the Add Account/Contact option from the left drawer/global menu
             this.registerCustomization('left_drawer', 'left_drawer', {
-                at: function(row) { 
+                at: function(row) {
                     return row.name === 'AddAccountContactAction';
                 },
                 type: 'remove'
@@ -359,9 +359,11 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            crm.Views.Account.List.prototype.querySelect = crm.Views.Account.List.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Account.List, {
                 // Add the account manager's email to the list view
-                querySelect: Mobile.SalesLogix.Views.Account.List.prototype.querySelect.concat([
+
+                querySelect: crm.Views.Account.List.prototype.querySelect.concat([
                     'AccountManager/UserInfo/Email'
                 ]),
                 itemTemplate: new Simplate([
@@ -387,12 +389,13 @@ define('Mobile/Sample/ApplicationModule', [
             });
 
             //Some customizations require extending the view class.
+            crm.Views.Account.Detail.prototype.querySelect = crm.Views.Account.Detail.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
                 //Localization String
                 helloWorldAlertText: 'Hello World!',
 
                 //Add Region property to the SData query for the Account Detail view
-                querySelect: Mobile.SalesLogix.Views.Account.Detail.prototype.querySelect.concat([
+                querySelect: crm.Views.Account.Detail.prototype.querySelect.concat([
                     'Region', 'ParentId'
                 ]),
                 //Implement a minimal function for our custom action.
@@ -463,9 +466,10 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            crm.Views.Account.Edit.prototype.querySelect = crm.Views.Account.Edit.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
                 // Add properties to the SData query for Account Edit mode
-                querySelect: Mobile.SalesLogix.Views.Account.Edit.prototype.querySelect.concat([
+                querySelect: crm.Views.Account.Edit.prototype.querySelect.concat([
                     'ParentId'
                 ])
             });
@@ -486,9 +490,10 @@ define('Mobile/Sample/ApplicationModule', [
         },
         registerContactCustomizations: function() {
             //Override the list view row template in order to show phone #
+            crm.Views.Contact.List.prototype.querySelect = crm.Views.Contact.List.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Contact.List, {
                 //First, make sure WorkPhone is included in the SData query.
-                querySelect: Mobile.SalesLogix.Views.Contact.List.prototype.querySelect.concat([
+                querySelect: crm.Views.Contact.List.prototype.querySelect.concat([
                     'WorkPhone'
                 ]),
                 itemTemplate: new Simplate([

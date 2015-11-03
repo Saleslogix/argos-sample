@@ -35,35 +35,43 @@
                                 //resource
         };
     </script>
-    <script type="text/javascript" src="../../argos-sdk/libraries/less/less-1.7.5.min.js"></script>
+      <script type="text/javascript" src="../../argos-sdk/libraries/less/less.min.js"></script>
+      <!-- CSS -->
+      <link type="text/css" rel="stylesheet" href="../argos-sample/content/css/sample.css" />
 
-    <!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="../argos-sample/content/css/sample.css" />
+      <!-- SData Client Library -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-dependencies-debug.js"></script>
+      <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-debug.js"></script>
 
-    <!-- JSON -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/json2.js"></script>
+      <!-- Simplate -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/Simplate.js"></script>
 
-    <!-- SData Client Library -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-dependencies-debug.js"></script>
-    <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-debug.js"></script>
+      <!-- canvas2image for when HTMLCanvasElement.prototype.toDataURL isn't available -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/canvas2image.js"></script>
 
-    <!-- Moment.js -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/moment/moment-with-langs.min.js"></script>
+      <!-- Deep Diff -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/deep-diff/deep-diff-0.2.0.min.js"></script>
 
-    <!-- Simplate -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/Simplate.js"></script>
+      <!-- Chart.js -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/Chart.min.js"></script>
 
-    <!-- canvas2image for when HTMLCanvasElement.prototype.toDataURL doesn't work -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/canvas2image.js"></script>
+      <!-- Rx.js -->
+      <script src="../../argos-sdk/libraries/rx/rx.all.js"></script>
 
-    <!-- Deep Diff -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/deep-diff/deep-diff-0.2.0.min.js"></script>
+      <!-- Babel -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/babel/browser-polyfill.min.js"></script>
+
+      <!-- moment -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/moment/moment-with-locales.js"></script>
+
+      <!-- PouchDB -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/PouchDB/pouchdb-4.0.1.min.js"></script>
+
+      <!-- L20N.js -->
+      <script type="text/javascript" src="../../argos-sdk/libraries/l20n/l20n.js"></script>
 
     <!-- Google Maps -->
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-
-    <!-- Chart.js -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/Chart.min.js"></script>
 
     <!-- Dojo -->
     <script type="text/javascript" src="../../argos-sdk/libraries/dojo/dojo/dojo.js" data-dojo-config="parseOnLoad:true, async:true"></script>
@@ -74,9 +82,8 @@
             { name: 'dojo', location: '../../argos-sdk/libraries/dojo/dojo' },
             { name: 'dijit', location: '../../argos-sdk/libraries/dojo/dijit' },
             { name: 'snap', location: '../../argos-sdk/libraries/snap', main: 'snap' },
-            { name: 'moment', location: '../../argos-sdk/libraries/moment', main: 'moment-with-langs.min' },
-            { name: 'argos', location: '../../argos-sdk/src' },
-            { name: 'crm', location: 'src' },
+            { name: 'argos', location: '../../argos-sdk/src-out' },
+            { name: 'crm', location: 'src-out' },
             { name: 'configuration', location: 'configuration' },
             { name: 'localization', location: 'localization' },
             { name: 'Mobile/Sample', location: '../argos-sample/src' },
@@ -99,22 +106,63 @@
 
     <script type="text/javascript">
     (function() {
+        function buildContext() {
+          var filePaths = {
+            './localization/locales/crm': [
+              'strings.l20n',
+              'regional.l20n'
+            ],
+            '../../argos-sdk/localization/locales/argos': [
+              'strings.l20n',
+              'regional.l20n'
+            ]
+          };
+          var supportedLocales = [
+            'en',
+            'en-GB',
+            'de',
+            'fr',
+            'it',
+            'ru',
+            'zh-CN',
+            'zh-TW'
+          ]
+          var ctx = L20n.getContext();
+          var defaultLocale = 'en';
+          var currentLocale = 'en';
+
+          Object.keys(filePaths).forEach(function(path) {
+            var files = filePaths[path];
+            files.forEach(function(file) {
+              ctx.linkResource(function(locale) {
+                return [path, locale, file].join('/');
+              });
+            });
+          });
+          ctx.registerLocales(defaultLocale, supportedLocales);
+          ctx.requestLocales(currentLocale);
+          window.localeContext = ctx;
+          return ctx;
+        }
         var application = 'Mobile/SalesLogix/Application',
             configuration = [
                 'configuration/sample/development'
             ];
-        require([application].concat(configuration), function(application, configuration) {
-            var localization = [
-                'localization/en',
-                'localization/saleslogix/en',
-                'localization/sample/en'
-            ];
-            require(localization.concat('dojo/domReady!'), function() {
-                var instance = new application(configuration);
+        var ctx = buildContext();
+        ctx.ready(function() {
+            require([application].concat(configuration), function(application, configuration) {
+                var localization = [
+                    'localization/en',
+                    'localization/saleslogix/en',
+                    'localization/sample/en'
+                ];
+                require(localization.concat('dojo/domReady!'), function() {
+                    var instance = new application(configuration);
 
-                instance.activate();
-                instance.init();
-                instance.run();
+                    instance.activate();
+                    instance.init();
+                    instance.run();
+                });
             });
         });
     })();
@@ -123,4 +171,3 @@
 <body>
 </body>
 </html>
-
