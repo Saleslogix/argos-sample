@@ -18,8 +18,9 @@ define('Mobile/Sample/ApplicationModule', [
     'dojo/string',
     'dojo/query',
     'dojo/dom-class',
-    'Mobile/SalesLogix/Format',
-    'Sage/Platform/Mobile/ApplicationModule',
+    'crm/Format',
+    'crm/Models/Account/SData',
+    'argos/ApplicationModule',
     'Mobile/Sample/Views/GroupsList',
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
@@ -31,6 +32,7 @@ define('Mobile/Sample/ApplicationModule', [
     query,
     domClass,
     format,
+    AccountSDataModel,
     ApplicationModule,
     GroupsList,
     AccountGroupList,
@@ -359,10 +361,11 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
-            crm.Views.Account.List.prototype.querySelect = crm.Views.Account.List.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Account.List, {
-                // Add the account manager's email to the list view
-
+                // NOTICE: After 3.4, this is no longer the preferred method to customize the
+                // querySelect. It will work for backwards compatibility for online only. See the
+                // account detail customization section which shows how to customize the model
+                // which will work for offline support.
                 querySelect: crm.Views.Account.List.prototype.querySelect.concat([
                     'AccountManager/UserInfo/Email'
                 ]),
@@ -388,16 +391,44 @@ define('Mobile/Sample/ApplicationModule', [
                 ])
             });
 
+            // NOTICE: This is the proper method of modifying query parameters for 3.4 and later.
+            // querySelect customizations should now go into the model, not the view.
+            this.registerCustomization('models/detail/querySelect', 'account_sdata_model', {
+                at: function() { return true; },
+                type: 'insert',
+                where: 'after',
+                value: 'Region'
+            });
+
+            this.registerCustomization('models/detail/querySelect', 'account_sdata_model', {
+                at: function() { return true; },
+                type: 'insert',
+                where: 'after',
+                value: 'ParentId'
+            });
+
+            // Other query properties on the model
+            this.registerCustomization('models/queryModel', 'account_sdata_model', {
+                at: function(queryModel) { return queryModel.name === 'list'; },
+                type: 'modify',
+                value: {
+                    queryOrderBy: 'Industry desc'
+                }
+            })
+
             //Some customizations require extending the view class.
-            crm.Views.Account.Detail.prototype.querySelect = crm.Views.Account.Detail.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
                 //Localization String
                 helloWorldAlertText: 'Hello World!',
 
-                //Add Region property to the SData query for the Account Detail view
-                querySelect: crm.Views.Account.Detail.prototype.querySelect.concat([
-                    'Region', 'ParentId'
-                ]),
+                // NOTICE: After 3.4, this is no longer the preferred method to customize the
+                // querySelect. It will work for backwards compatibility for online only. See the
+                // account detail customization section which shows how to customize the model
+                // which will work for offline support.
+                //querySelect: crm.Views.Account.Detail.prototype.querySelect.concat([
+                //    'Region', 'ParentId'
+                //]),
+
                 //Implement a minimal function for our custom action.
                 showHelloWorld: function() {
                     alert(this.helloWorldAlertText);
@@ -466,9 +497,11 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
-            crm.Views.Account.Edit.prototype.querySelect = crm.Views.Account.Edit.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
-                // Add properties to the SData query for Account Edit mode
+                // NOTICE: After 3.4, this is no longer the preferred method to customize the
+                // querySelect. It will work for backwards compatibility for online only. See the
+                // account detail customization section which shows how to customize the model
+                // which will work for offline support.
                 querySelect: crm.Views.Account.Edit.prototype.querySelect.concat([
                     'ParentId'
                 ])
@@ -490,9 +523,11 @@ define('Mobile/Sample/ApplicationModule', [
         },
         registerContactCustomizations: function() {
             //Override the list view row template in order to show phone #
-            crm.Views.Contact.List.prototype.querySelect = crm.Views.Contact.List.prototype.querySelect || [];
             lang.extend(Mobile.SalesLogix.Views.Contact.List, {
-                //First, make sure WorkPhone is included in the SData query.
+                // NOTICE: After 3.4, this is no longer the preferred method to customize the
+                // querySelect. It will work for backwards compatibility for online only. See the
+                // account detail customization section which shows how to customize the model
+                // which will work for offline support.
                 querySelect: crm.Views.Contact.List.prototype.querySelect.concat([
                     'WorkPhone'
                 ]),
