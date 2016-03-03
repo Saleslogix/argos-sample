@@ -74,12 +74,31 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            this.registerActivityCustomizations();
             this.registerKPICustomizations();
             this.registerAccountCustomizations();
             this.registerContactCustomizations();
             this.registerOpportunityCustomizations();
             this.registerLeadCustomizations();
             this.registerErrorLogCustomizations();
+        },
+        registerActivityCustomizations: function() {
+            this.registerCustomization('edit', 'activity_edit', {
+                at: function(row) { return row.name === 'Account'; },
+                type: 'modify',
+                value: {
+                    requireSelection: false
+                }
+            });
+
+            this.registerCustomization('edit', 'activity_edit', {
+                at: function(row) { return row.name === 'Contact'; },
+                type: 'modify',
+                value: {
+                    requireSelection: false
+                }
+            });
+
         },
         registerKPICustomizations: function() {
             this.registerCustomization('metrics/definitions', 'default_metrics', {
