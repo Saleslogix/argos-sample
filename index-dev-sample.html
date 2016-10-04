@@ -65,7 +65,7 @@
       <script type="text/javascript" src="../../argos-sdk/libraries/moment/moment-with-locales.js"></script>
 
       <!-- PouchDB -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/PouchDB/pouchdb-4.0.1.min.js"></script>
+      <script type="text/javascript" src="../../argos-sdk/libraries/PouchDB/pouchdb-4.0.3.min.js"></script>
 
       <!-- L20N.js -->
       <script type="text/javascript" src="../../argos-sdk/libraries/l20n/l20n.js"></script>
@@ -106,18 +106,9 @@
 
     <script type="text/javascript">
     (function() {
-        function buildContext() {
-          var filePaths = {
-            './localization/locales/crm': [
-              'strings.l20n',
-              'regional.l20n'
-            ],
-            '../../argos-sdk/localization/locales/argos': [
-              'strings.l20n',
-              'regional.l20n'
-            ]
-          };
-          var supportedLocales = [
+      require(['crm/Bootstrap'], function(bootstrap) {
+        bootstrap({
+          supportedLocales: [
             'en',
             'en-GB',
             'de',
@@ -126,45 +117,33 @@
             'ru',
             'zh-CN',
             'zh-TW'
+          ],
+          defaultLocale: 'en',
+          currentLocale: 'en',
+          parentLocale: 'en',
+          isRegionMetric: false,
+          configuration: [
+            'configuration/sample/development'
+          ],
+          application: 'crm/Application',
+          legacyLocalization: [
+            'localization/saleslogix/en',
+            'localization/sample/en'
+          ],
+          legacyLocalizationFallback: [
+            'localization/saleslogix/en'
+          ],
+          localeFiles: [
+            './localization/locales/crm/en/strings.l20n',
+            './localization/locales/crm/en/regional.l20n',
+            './localization/locales/icboe/en/strings.l20n',
+            './localization/locales/icboe/en/regional.l20n',
+            './localization/locales/contour/en/strings.l20n',
+            '../../argos-sdk/localization/locales/argos/en/strings.l20n',
+            '../../argos-sdk/localization/locales/argos/en/regional.l20n',
           ]
-          var ctx = L20n.getContext();
-          var defaultLocale = 'en';
-          var currentLocale = 'en';
-
-          Object.keys(filePaths).forEach(function(path) {
-            var files = filePaths[path];
-            files.forEach(function(file) {
-              ctx.linkResource(function(locale) {
-                return [path, locale, file].join('/');
-              });
-            });
-          });
-          ctx.registerLocales(defaultLocale, supportedLocales);
-          ctx.requestLocales(currentLocale);
-          window.localeContext = ctx;
-          return ctx;
-        }
-        var application = 'Mobile/SalesLogix/Application',
-            configuration = [
-                'configuration/sample/development'
-            ];
-        var ctx = buildContext();
-        ctx.ready(function() {
-            require([application].concat(configuration), function(application, configuration) {
-                var localization = [
-                    'localization/en',
-                    'localization/saleslogix/en',
-                    'localization/sample/en'
-                ];
-                require(localization.concat('dojo/domReady!'), function() {
-                    var instance = new application(configuration);
-
-                    instance.activate();
-                    instance.init();
-                    instance.run();
-                });
-            });
         });
+      });
     })();
     </script>
 </head>

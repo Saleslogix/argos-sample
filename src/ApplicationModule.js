@@ -198,7 +198,7 @@ define('Mobile/Sample/ApplicationModule', [
                 where: 'before',
                 value: {
                     id: 'customAction1',
-                    icon: 'content/images/icons/Opportunities_24x24.png',
+                    cls: 'fa fa-money fa-2x',
                     label: 'Opportunities',
                     fn: function(action, selection) {
                         // Get a reference to the navigateToRelatedView function in the base List
@@ -216,7 +216,7 @@ define('Mobile/Sample/ApplicationModule', [
                 where: 'before',
                 value: {
                     id: 'customAction2',
-                    icon: 'content/images/icons/Hello_World_24.png',
+                    cls: 'fa fa-globe fa-2x',
                     label: this.helloWorldText,
                     fn: function(action, selection) {
                         alert(selection.data['$descriptor']+' says "Hello!"');
@@ -233,7 +233,7 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     value: this.helloWorldValueText,
                     label: this.helloWorldText,
-                    icon: 'content/images/icons/Hello_World_24.png',
+                    iconClass: 'fa fa-globe fa-lg',
                     action: 'showHelloWorld'
                 }
             });
@@ -321,7 +321,7 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     value: 'Show Map',
                     label: 'location',
-                    icon: 'content/images/icons/Map_24.png',
+                    iconClass: 'fa fa-map-o fa-lg',
                     action: 'showMap'
                 }
             });
@@ -372,7 +372,7 @@ define('Mobile/Sample/ApplicationModule', [
                 where: 'after',
                 value: {
                     id: 'customButton',
-                    icon: 'content/images/icons/Hello_World_24.png',
+                    cls: 'fa fa-globe fa-lg',
                     action: 'showHelloWorld',
                     // Calling App.getViewSecurity will initialize the view and call startup to process the layout.
                     // Ensure this is called last so customizations are loaded before the layout is processed.
@@ -568,7 +568,7 @@ define('Mobile/Sample/ApplicationModule', [
                 value: {
                     security: 'Entities/Contact/CustomAction',
                     id: 'custom-action',
-                    icon: 'content/images/icons/Contacts_24x24.png',
+                    cls: 'fa fa-user fa-2x',
                     fn: function() { alert('We have clearance to this Secured Action!'); }
                 }
             });
