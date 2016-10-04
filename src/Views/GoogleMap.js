@@ -44,13 +44,13 @@ define('Mobile/Sample/Views/GoogleMap', [
                     {
                         id: 'gotoGoogleButton',
                         side: 'right',
-                        icon: 'content/images/icons/Map_24.png',
+                        cls: 'fa fa-map-o fa-lg',
                         action: 'viewAddress'
                     },
                     {
                         id: 'showMapButton',
                         side: 'right',
-                        icon: 'content/images/icons/srch_24.png',
+                        cls: 'fa fa-search fa-lg',
                         action: 'initMap'
                     }
                 ]
