@@ -18,10 +18,11 @@ This sample module was designed to show how you can add customizations to an exi
 *  Example of handling a self-join where only the ID is available (Parent in Account Detail/Edit)
 *  Inserting and modifying hash tags for List View searches
 *  Example of performing multiple customizations with a single customization call
+*  Modifying OOTB models (new starting in 3.4)
 
 #Installation
 
-- - - - - 
+- - - - -
 
 ### Prerequisites
 *	A web server
@@ -32,7 +33,7 @@ This sample module was designed to show how you can add customizations to an exi
 2\.	change to the base directory where you cloned [Argos SDK][argos-sdk], eg:
 
 		cd \projects\mobile
-		
+
 3\.	Execute the following commands (clone command shown with READ-ONLY URL; if you have commit rights, use the appropriate Read+Write URL).
 
 		cd products
@@ -77,7 +78,7 @@ This sample module was designed to show how you can add customizations to an exi
         ];
 ```
 
-4\.	If you have any additional images, icons, etc that you wish to be available during development you will need to copy them into their respective folders within argos-saleslogix. Doing this allows any relative paths to files to remain intact when your module is deployed (all folders are merged in deployment). 
+4\.	If you have any additional images, icons, etc that you wish to be available during development you will need to copy them into their respective folders within argos-saleslogix. Doing this allows any relative paths to files to remain intact when your module is deployed (all folders are merged in deployment).
 
 5\.	Place index-dev-sample.html in the argos-saleslogix folder. In your browser, open index-dev-sample.html from the file system, or...navigate to the path `/mobile/products/argos-saleslogix/index-dev-sample.html` on your web server, eg:
 
