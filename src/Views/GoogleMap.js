@@ -23,7 +23,7 @@ define('Mobile/Sample/Views/GoogleMap', [
     View
 ) {
 
-    return dojo.declare('Mobile.Sample.Views.GoogleMap', [Sage.Platform.Mobile.View], {
+    return dojo.declare('Mobile.Sample.Views.GoogleMap', [View], {
         widgetTemplate: new Simplate([
             '<div id="{%= $.id %}" title="{%: $.titleText %}" class="panel {%= $.cls %}">',
                 '<div id="mapcanvas" style="height:400px">',
