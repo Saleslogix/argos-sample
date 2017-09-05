@@ -118,7 +118,7 @@ Example:
     <!-- Sample -->
     <link type="text/css" rel="stylesheet" href="content/css/sample.css" />
     <script type="text/javascript" src="content/javascript/argos-sample.js"></script>
-```    
+```
 
 4\. If you are deploying using AA 8.0+ then all you need to do now is within AA right click on CustomModules in the SLXMobile portal and choose Add Custom Module. Then browse to the `module-info.json` file and hit okay. AA will handle building, minifying, editing the index files and enabling you to select/deselect modules as needed. Make sure to save and re-deploy after any changes.
 
@@ -151,7 +151,7 @@ Example:
 
 2\. Copy all the folders within `deploy` (configuration, content and localization) and paste them into your Virtual Directory (SlxMobile) of your portal (where you deployed argos-saleslogix)
 
-3\. Edit `index.html`, `index-nocache.html`, `index.aspx` and `index-nocache.aspx` by copying the lines from `module-fragment.html` (the ones you added earlier, this file is not copied into the deploy folder so look for it in your normal dev directory) into each file at the designated modules marker:
+3\. Edit `index.html`, `index-nocache.html` and `index.ascx` by copying the lines from `module-fragment.html` (the ones you added earlier, this file is not copied into the deploy folder so look for it in your normal dev directory) into each file at the designated modules marker:
 
 ```
     <!-- Modules -->

@@ -2,8 +2,8 @@
     "name": "sample",
     "displayName": "Sample Customizations",
     "description": "A sample module implementation that shows how to customize the Infor CRM Mobile client.",
-    "majorVersion": 3,
-    "minorVersion": 5,
+    "majorVersion": 4,
+    "minorVersion": 0,
     "buildNumber": 0,
     "targetProduct": "saleslogix"
 }
