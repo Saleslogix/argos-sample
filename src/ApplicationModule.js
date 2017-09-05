@@ -572,6 +572,30 @@ define('Mobile/Sample/ApplicationModule', [
                     fn: function() { alert('We have clearance to this Secured Action!'); }
                 }
             });
+
+            // Override the default alert error and show the validation
+            // exception message from the server
+            this.registerCustomization('edit/errorHandlers', 'contact_edit', {
+                at: function(row) {
+                  return row.name === 'AlertError';
+                },
+                type: 'modify',
+                value: {
+                    handle: function(error, next) {
+                        // The original XHR is preserved on the error object.
+                        // Unwrap the response from the server and parse the JSON.
+                        var xhr = error.xhr;
+                        var response = '';
+                        if (xhr) {
+                          response = JSON.parse(xhr.responseText);
+                          if (response && response.length > 0) {
+                            alert(response[0].message);
+                          }
+                        }
+                        next();
+                    }
+                }
+            });
         },
         registerLeadCustomizations: function() {
 
