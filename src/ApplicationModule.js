@@ -399,12 +399,12 @@ define('Mobile/Sample/ApplicationModule', [
                     '<h4>{%: $.AccountManager && $.AccountManager.UserInfo ? $.AccountManager.UserInfo.Email : "" %}</h4>',
                     '{% if ($.MainPhone) { %}',
                         '<h4>',
-                            '{%: $$.phoneAbbreviationText + Sage.Platform.Mobile.Format.phone($.MainPhone) %}',
+                            '{%: $$.phoneAbbreviationText + argos.Format.phone($.MainPhone) %}',
                         '</h4>',
                     '{% } %}',
                     '{% if ($.Fax) { %}',
                         '<h4>',
-                            '{%: $$.faxAbbreviationText + Sage.Platform.Mobile.Format.phone($.Fax) %}',
+                            '{%: $$.faxAbbreviationText + argos.Format.phone($.Fax) %}',
                         '</h4>',
                     '{% } %}'
                 ])
