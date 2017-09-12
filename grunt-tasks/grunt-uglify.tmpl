@@ -1,0 +1,43 @@
+module.exports = function(grunt) {
+    grunt.config('uglify', {
+      options: {
+        screwIE8: true,
+        sourceMap: false,
+        ASCIIOnly: true,
+        compress: {
+          drop_console: true,
+          cascade: true,
+          join_vars: true,
+          if_return: true,
+          conditionals: true,
+          loops: true,
+          booleans: true,
+          properties: true,
+          sequences: true,
+          drop_debugger: true,
+          unused: true,
+        },
+      },
+      argos_sample: {
+        files: {
+          'content/javascript/argos-sample.js': [
+            <% files.forEach(function(file, i) { %>'<%- file.folderName.replace("../src-out", "src") %>/<%- file.fileName %>',
+            <%});%>
+          ],
+        },
+      },
+    // argos_sample: {
+    //     files: {
+    //       'content/javascript/argos-sample.js': [
+    //         'src/Views/GroupsList.js',
+    //         'src/Views/Account/GroupList.js',
+    //         'src/Views/Contact/GroupList.js',
+    //         'src/Views/GoogleMap.js',
+    //         'src/ApplicationModule.js',
+    //       ],
+    //     },
+    //   },
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+  };

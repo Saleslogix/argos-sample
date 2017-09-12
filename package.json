@@ -2,7 +2,9 @@
   "name": "argos-sample",
   "version": "4.0.0",
   "devDependencies": {
-    "grunt": "~0.4.0",
-    "grunt-contrib-less": "~0.7.0"
+    "grunt": "~1.0.1",
+    "grunt-contrib-less": "~1.4.1",
+    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-argos-deps": "git+https://git@github.com/Saleslogix/grunt-argos-deps.git#v0.1.4"
   }
 }
