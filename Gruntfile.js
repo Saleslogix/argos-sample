@@ -1,27 +1,7 @@
-module.exports = function(grunt) { 
-    grunt.initConfig({
-        less: {
-            development: {
-                options: {
-                    paths: ['content/css']
-                },
-                files: {
-                    'min/css/themes/sample/sample.min.debug.css': 'content/css/themes/sample.less'
-                }
-            },
-            production: {
-                options: {
-                    paths: ['content/css'],
-                    yuicompress: true
-                },
-                files: {
-                    'min/css/themes/sample/sample.min.css': 'content/css/themes/sample.less'
-                }
-            }
-        }
-    });
-    
-    grunt.loadNpmTasks('grunt-contrib-less');
+module.exports = function(grunt) {
 
-    grunt.registerTask('default', ['less']);
+  // Load per-task config from separate files
+  grunt.loadTasks('grunt-tasks');
+
+  grunt.registerTask('default', ['argos-deps', 'less']);
 };

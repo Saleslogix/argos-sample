@@ -24,7 +24,8 @@ obj/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
-
+temp.uglify.js
+argos-sample.js
 #Tooling
 _ReSharper*/
 *.resharper.user

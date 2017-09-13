@@ -1,0 +1,12 @@
+{
+    "name": "Mobile/Sample",
+    "location": "Mobile/Sample"
+},
+{
+    "name": "configuration/sample",
+    "location": "../argos-sample/configuration"
+},
+{
+    "name": "localization/sample",
+    "location": "../argos-sample/localization"
+}
