@@ -11,9 +11,5 @@
 		"src": "../configuration",
 		"dest": "configuration/sample",
 		"filters": ".*\\.js"
-	},{
-		"src": "../localization",
-		"dest": "localization/sample",
-		"filters": ".*\\.js"
 	}]
 }

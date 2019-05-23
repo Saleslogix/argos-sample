@@ -62,7 +62,6 @@ This sample module was designed to show how you can add customizations to an exi
             { name: 'Mobile/SalesLogix', location: 'src' },
             { name: 'Mobile/Sample', location: '../argos-sample/src' }, // <-- Namespace and src folder path
             { name: 'configuration/sample', location: '../argos-sample/configuration' }, // <-- configuration/name, config folder path
-            { name: 'localization/sample', location: '../argos-sample/localization' } // <-- localization/name and locale folder path
             ]
     });
 
@@ -73,8 +72,7 @@ This sample module was designed to show how you can add customizations to an exi
     require([application].concat(configuration), function(application, configuration) {
         var localization = [
             'localization/en',
-            'localization/saleslogix/en',
-            'localization/sample/en' // <-- locale file (no extension)
+            'localization/saleslogix/en'
         ];
 ```
 

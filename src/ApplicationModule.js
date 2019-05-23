@@ -24,7 +24,8 @@ define('Mobile/Sample/ApplicationModule', [
     'Mobile/Sample/Views/GroupsList',
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
-    'Mobile/Sample/Views/GoogleMap'
+    'Mobile/Sample/Views/GoogleMap',
+    'crm/Application'
 ], function(
     declare,
     lang,
@@ -37,7 +38,8 @@ define('Mobile/Sample/ApplicationModule', [
     GroupsList,
     AccountGroupList,
     ContactGroupList,
-    GoogleMap
+    GoogleMap,
+    CRMApplication
 ) {
 
     return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
@@ -63,8 +65,8 @@ define('Mobile/Sample/ApplicationModule', [
 
             //We want to add the Groups list view to the default set of home screen views.
             //Save the original getDefaultviews() function.
-            var originalDefViews = Mobile.SalesLogix.Application.prototype.getDefaultViews;
-            lang.extend(Mobile.SalesLogix.Application, {
+            var originalDefViews = CRMApplication.prototype.getDefaultViews;
+            lang.extend(CRMApplication, {
                 getDefaultViews: function() {
                     //Get view array from original function, or default to empty array
                     var views = originalDefViews.apply(this, arguments) || [];
@@ -202,7 +204,7 @@ define('Mobile/Sample/ApplicationModule', [
                     label: 'Opportunities',
                     fn: function(action, selection) {
                         // Get a reference to the navigateToRelatedView function in the base List
-                        var nav = Mobile.SalesLogix.Views.Account.List.prototype.navigateToRelatedView;
+                        var nav = crm.Views.Account.List.prototype.navigateToRelatedView;
                         nav.call(this, action, selection, 'opportunity_related', 'Account.id eq "${0}"');
                     }
                 }
@@ -376,11 +378,11 @@ define('Mobile/Sample/ApplicationModule', [
                     action: 'showHelloWorld',
                     // Calling App.getViewSecurity will initialize the view and call startup to process the layout.
                     // Ensure this is called last so customizations are loaded before the layout is processed.
-                    security: App.getViewSecurity(Mobile.SalesLogix.Views.Account.Detail.prototype.editView, 'update')
+                    security: App.getViewSecurity(crm.Views.Account.Detail.prototype.editView, 'update')
                 }
             });
 
-            lang.extend(Mobile.SalesLogix.Views.Account.List, {
+            lang.extend(crm.Views.Account.List, {
                 // NOTICE: After 3.4, this is no longer the preferred method to customize the
                 // querySelect. It will work for backwards compatibility for online only. See the
                 // account detail customization section which shows how to customize the model
@@ -436,7 +438,7 @@ define('Mobile/Sample/ApplicationModule', [
             })
 
             //Some customizations require extending the view class.
-            lang.extend(Mobile.SalesLogix.Views.Account.Detail, {
+            lang.extend(crm.Views.Account.Detail, {
                 //Localization String
                 helloWorldAlertText: 'Hello World!',
 
@@ -491,7 +493,7 @@ define('Mobile/Sample/ApplicationModule', [
                         contentNode.innerHTML = (this.entry.ParentAccount && this.entry.ParentAccount.AccountName) || '';
                 },
                 processEntry: function(entry) {
-                    Mobile.SalesLogix.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
+                    crm.Views.Account.Detail.superclass.processEntry.apply(this, arguments);
                     if (entry && entry['ParentId'])
                     {
                         this.requestParentAccount(entry['ParentId']);
@@ -516,7 +518,7 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
-            lang.extend(Mobile.SalesLogix.Views.Account.Edit, {
+            lang.extend(crm.Views.Account.Edit, {
                 // NOTICE: After 3.4, this is no longer the preferred method to customize the
                 // querySelect. It will work for backwards compatibility for online only. See the
                 // account detail customization section which shows how to customize the model
@@ -542,7 +544,7 @@ define('Mobile/Sample/ApplicationModule', [
         },
         registerContactCustomizations: function() {
             //Override the list view row template in order to show phone #
-            lang.extend(Mobile.SalesLogix.Views.Contact.List, {
+            lang.extend(crm.Views.Contact.List, {
                 // NOTICE: After 3.4, this is no longer the preferred method to customize the
                 // querySelect. It will work for backwards compatibility for online only. See the
                 // account detail customization section which shows how to customize the model
@@ -553,7 +555,7 @@ define('Mobile/Sample/ApplicationModule', [
                 itemTemplate: new Simplate([
                     '<h3>{%: $.NameLF %}</h3>',
                     '<h4>{%: $.AccountName %}</h4>',
-                    '<h4>{%: Mobile.SalesLogix.Format.phone($.WorkPhone, false) %}</h4>'
+                    '<h4>{%: crm.Format.phone($.WorkPhone, false) %}</h4>'
                 ])
             });
 
@@ -639,12 +641,12 @@ define('Mobile/Sample/ApplicationModule', [
 
                 The following properties are exposed so that you may tailor as needed:
              */
-            lang.mixin(Sage.Platform.Mobile.ErrorManager, {
+            lang.mixin(argos.ErrorManager, {
                 // number of error logs to keep on device, defaults to 10
                 errorCacheSizeMax: 15
             });
 
-            lang.extend(Mobile.SalesLogix.Views.ErrorLog.Detail, {
+            lang.extend(crm.Views.ErrorLog.Detail, {
                 // for mobile devices this string will set as the To: field
                 // defaults to empty
                 defaultToAddress: 'techs@super-support.com',
