@@ -15,69 +15,103 @@
     <link rel="apple-touch-icon-precomposed" href="content/images/icon.png" />
     <link rel="apple-touch-startup-image" href="content/images/loading.png">
 
+    <link rel="stylesheet" id="sohoxi-stylesheet" href="https://cdn.hookandloop.infor.com/sohoxi/4.3.1/dist/css/light-theme.css">
+
     <!-- less files -->
+    <link rel="stylesheet/less" type="text/css" href="../../argos-sdk/content/css/themes/crm.less" />
+    <link rel="stylesheet/less" type="text/css" href="content/css/app.less" />
+
+    <!-- sample less files -->
     <link rel="stylesheet/less" type="text/css" href="../argos-sample/content/css/themes/sample.less" />
 
     <!-- less -->
     <script type="text/javascript">
-        less = {
-            env: "development", // or "production"
-            async: false,       // load imports async
-            fileAsync: false,   // load imports async when in a page under
-                                // a file protocol
-            poll: 1000,         // when in watch mode, time in ms between polls
-            functions: {},      // user functions, keyed by name
-            dumpLineNumbers: "all", // or "mediaQuery" or "all"
-            relativeUrls: true,// whether to adjust url's to be relative
-                                // if false, url's are already relative to the
-                                // entry less file
-            rootpath: ""// a path to add on to the start of every url
-                                //resource
-        };
+      less = {
+        env: "development", // or "production"
+        async: false, // load imports async
+        fileAsync: false, // load imports async when in a page under
+        // a file protocol
+        poll: 1000, // when in watch mode, time in ms between polls
+        functions: {}, // user functions, keyed by name
+        dumpLineNumbers: "all", // or "mediaQuery" or "all"
+        relativeUrls: true, // whether to adjust url's to be relative
+        // if false, url's are already relative to the
+        // entry less file
+        rootpath: "" // a path to add on to the start of every url
+          //resource
+      };
     </script>
-      <script type="text/javascript" src="../../argos-sdk/libraries/less/less.min.js"></script>
-      <!-- CSS -->
-      <link type="text/css" rel="stylesheet" href="../argos-sample/content/css/sample.css" />
 
-      <!-- SData Client Library -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-dependencies-debug.js"></script>
-      <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-debug.js"></script>
+     <script type="text/javascript" src="../../argos-sdk/libraries/less/less.js"></script>
 
-      <!-- Simplate -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/Simplate.js"></script>
+     <!-- SData Client Library -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-dependencies-debug.js"></script>
+     <script type="text/javascript" src="../../argos-sdk/libraries/sdata/sdata-client-debug.js"></script>
 
-      <!-- canvas2image for when HTMLCanvasElement.prototype.toDataURL isn't available -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/canvas2image.js"></script>
+     <!-- Simplate -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/Simplate.js"></script>
 
-      <!-- Deep Diff -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/deep-diff/deep-diff-0.2.0.min.js"></script>
+     <!-- canvas2image for when HTMLCanvasElement.prototype.toDataURL isn't available -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/canvas2image.js"></script>
 
-      <!-- Chart.js -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/Chart.min.js"></script>
+     <!-- Deep Diff -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/deep-diff/deep-diff-0.2.0.min.js"></script>
 
-      <!-- Rx.js -->
-      <script src="../../argos-sdk/libraries/rx/rx.all.js"></script>
+     <!-- Rx.js -->
+     <script src="../../argos-sdk/libraries/rxjs/rx.lite.js"></script>
 
-      <!-- Babel -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/babel/browser-polyfill.min.js"></script>
+     <!-- Page.js -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/pagejs-1.6.1/page.js"></script>
 
-      <!-- moment -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/moment/moment-with-locales.js"></script>
+     <!-- Babel -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/babel-polyfill/polyfill.js"></script>
 
-      <!-- PouchDB -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/PouchDB/pouchdb-4.0.3.min.js"></script>
+     <!-- moment -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/moment/moment-with-locales.js"></script>
 
-      <!-- L20N.js -->
-      <script type="text/javascript" src="../../argos-sdk/libraries/l20n/l20n.js"></script>
+     <!-- PouchDB -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/pouchdb/pouchdb-6.3.4.js"></script>
 
-    <!-- Google Maps -->
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+     <!-- L20N.js -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/l20n/l20n.js"></script>
 
-    <!-- ICRM Common, depends on moment -->
-    <script type="text/javascript" src="../../argos-sdk/libraries/icrm/common.bundle.js"></script>
-    <script type="text/javascript" src="../../argos-sdk/libraries/icrm/customization.bundle.js"></script>
+     <!-- jQuery -->
+     <script type="text/javascript" src="https://cdn.hookandloop.infor.com/sohoxi/4.3.1/dist/js/jquery-3.1.1.js"></script>
+
+     <!-- SohoXi -->
+     <script type="text/javascript" src="https://cdn.hookandloop.infor.com/sohoxi/4.3.1/dist/js/sohoxi.js"></script>
+
+     <!-- Chart.js -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/chartjs/Chart.min.js"></script>
+
+     <!-- Redux -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/redux/redux.js"></script>
+
+     <!-- PDF.js -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/pdfjs/pdf.min.js"></script>
+
+     <!-- ICRM Common, depends on moment -->
+     <script type="text/javascript" src="../../argos-sdk/libraries/icrm/common.bundle.js"></script>
+     <script type="text/javascript" src="../../argos-sdk/libraries/icrm/customization.bundle.js"></script>
+     <script type="text/javascript" src="../../argos-sdk/libraries/icrm/services.bundle.js"></script>
+
+     <script type="application/l20n">{}</script>
 
     <!-- Dojo -->
+    <script pin="pin" type="text/javascript">
+      var language, regionLocale;
+      if (window.localStorage) {
+        language = window.localStorage.getItem('language');
+        regionLocale = window.localStorage.getItem('region');
+      }
+      var dojoConfig = {
+          parseOnLoad:false,
+          async:true,
+          blankGif:'content/images/blank.gif',
+          locale: language ||  'en',
+          extraLocale: [regionLocale || 'en-us']
+      };
+  </script>
     <script type="text/javascript" src="../../argos-sdk/libraries/dojo/dojo/dojo.js" data-dojo-config="parseOnLoad:true, async:true"></script>
     <script type="text/javascript">
     require({
@@ -96,7 +130,8 @@
         map: {
             '*': {
                 'Sage/Platform/Mobile': 'argos',
-                'Mobile/SalesLogix': 'crm'
+                'Mobile/SalesLogix': 'crm',
+                'icboe': 'crm/Integrations/BOE'
             }
         },
         paths: {
@@ -105,12 +140,17 @@
         }
     });
     </script>
+</head>
+<body>
+  <div id="rootNode"></div>
+  <script type="text/javascript">
 
-    <script type="text/javascript">
-    (function() {
-      require(['crm/Bootstrap'], function(bootstrap) {
-        bootstrap({
-          supportedLocales: [
+    // set path for soho cultures
+    window.Locale.culturesPath = 'https://cdn.hookandloop.infor.com/sohoxi/4.3.1/dist/js/cultures/';
+
+    var languages = {"de":"Deutsch (Deutschland)","en":"English (United States)","en-GB":"English (United Kingdom)","es":"Spanish","es-ES":"Español (España)","fr":"français (France)","it":"italiano (Italia)","ja":"日本語","nl":"Nederlands","pt":"Inglês (Estados Unidos)","pt-BR":"Português (Brasil)","ru":"русский","th":"ไทย","zh-CN":"文中(简体)","zh-TW":"中文 (繁體)"};
+
+    var supportedLocales = [
             'en',
             'en-GB',
             'de',
@@ -118,11 +158,33 @@
             'it',
             'ru',
             'zh-CN',
-            'zh-TW'
+            'zh-TW',
+            'es',
+            'pt-BR',
+            'ja',
+            'nl',
+            'th'
           ],
-          defaultLocale: 'en',
-          currentLocale: 'en',
-          parentLocale: 'en',
+        defaultLocale = 'en',
+        currentLocale = language || 'en',
+        parentLocale = language || 'en',
+        defaultRegionLocale = 'en',
+        currentRegionLocale = regionLocale || 'en',
+        parentRegionLocale = regionLocale || 'en';
+    (function() {
+      // Shim, sohoxi will use define.amd and require it.
+      define('jquery', function() {
+        return window.$;
+      });
+      require(['crm/polyfills/index', 'crm/Bootstrap'], function(polyfills, bootstrap) {
+        bootstrap({
+          supportedLocales: supportedLocales,
+          defaultLocale: defaultLocale,
+          currentLocale: currentLocale,
+          parentLocale: parentLocale,
+          defaultRegionLocale: defaultRegionLocale,
+          currentRegionLocale: currentRegionLocale,
+          parentRegionLocale: parentRegionLocale,
           isRegionMetric: false,
           configuration: [
             'configuration/sample/development'
@@ -136,18 +198,19 @@
           ],
           localeFiles: [
             './localization/locales/crm/en/strings.l20n',
-            './localization/locales/crm/en/regional.l20n',
             './localization/locales/icboe/en/strings.l20n',
-            './localization/locales/icboe/en/regional.l20n',
             './localization/locales/contour/en/strings.l20n',
             '../../argos-sdk/localization/locales/argos/en/strings.l20n',
+          ],
+          regionalFiles: [
+            './localization/locales/crm/en/regional.l20n',
+            './localization/locales/icboe/en/regional.l20n',
             '../../argos-sdk/localization/locales/argos/en/regional.l20n',
-          ]
+          ],
+          rootElement: document.getElementById('rootNode')
         });
       });
     })();
-    </script>
-</head>
-<body>
+  </script>
 </body>
 </html>
