@@ -125,19 +125,15 @@ Example:
 #### Requirements
 *	Windows
 *	[NodeJS](https://nodejs.org/download/)
-*	Grunt (see the getting started [guide](http://gruntjs.com/getting-started))
 
 #### Steps
-
-1\.	Edit the Gruntfile.js in products/argos-saleslogix, add the product name (argos-sample) to the products configuration under grunt.initConfig. The basePath property is relative to products/argos-saleslogix
-
+1\.     Edit the build\release.jsb2 file and ensure all of your assets (js/images/css) are included
 2\.	Open a command prompt and execute the following:
 
-        cd products/argos-saleslogix
-        npm install
-        grunt release
+        cd products/argos-sample
+	build\release.cmd
 
-3\.	The deployed application will be in a `deploy` folder in products/argos-saleslogix. This will include all products specified in the products/argos-saleslogix/Gruntfile.js configuration
+3\.	The deployed application will be in a `deploy` folder in products/argos-sample. This will include all products specified in the products/argos-saleslogix/Gruntfile.js configuration
 
 ### Deploying
 
