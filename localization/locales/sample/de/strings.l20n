@@ -1,0 +1,8 @@
+<sampleApplicationModule ""
+  searchText: "DE Lookup"
+  regionText: "DE region"
+  faxText: "DE ax num"
+  helloWorldText: "DE Say Hello."
+  helloWorldValueText: "DE Click to show alert."
+  parentText: "DE parent"
+>

@@ -1,0 +1,8 @@
+<sampleApplicationModule ""
+  searchText: "Lookup"
+  regionText: "region"
+  faxText: "fax num"
+  helloWorldText: "Say Hello."
+  helloWorldValueText: "Click to show alert."
+  parentText: "parent"
+>

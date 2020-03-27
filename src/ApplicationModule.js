@@ -25,7 +25,8 @@ define('Mobile/Sample/ApplicationModule', [
     'Mobile/Sample/Views/Account/GroupList',
     'Mobile/Sample/Views/Contact/GroupList',
     'Mobile/Sample/Views/GoogleMap',
-    'crm/Application'
+    'crm/Application',
+    'argos/I18n'
 ], function(
     declare,
     lang,
@@ -39,16 +40,18 @@ define('Mobile/Sample/ApplicationModule', [
     AccountGroupList,
     ContactGroupList,
     GoogleMap,
-    CRMApplication
+    CRMApplication,
+    getResource
 ) {
+    var resource = getResource('sampleApplicationModule');
 
     return declare('Mobile.Sample.ApplicationModule', ApplicationModule, {
         //localization strings
-        regionText: 'region',
-        faxText: 'fax num',
-        helloWorldText: 'Say Hello.',
-        helloWorldValueText: 'Click to show alert.',
-        parentText: 'parent',
+        regionText: resource.regionText,
+        faxText: resource.faxText,
+        helloWorldText: resource.helloWorldText,
+        helloWorldValueText: resource.helloWorldValueText,
+        parentText: resource.parentText,
 
         loadViews: function() {
             this.inherited(arguments);
