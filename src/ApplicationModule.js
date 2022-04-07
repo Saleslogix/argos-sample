@@ -147,46 +147,30 @@ define('Mobile/Sample/ApplicationModule', [
                 at: true, // insert anywhere (hash tag queries are not ordered)
                 type: 'insert',
                 value: {
-                    tag: 'g500k',
+                    tag: '#g500k',
                     query: 'SalesPotential gt "500000"'
                 }
             });
 
-            // When inserting values you may also pass an array to insert multiple items
-            // This case its adding two hash tags: l500k and g1m for filtering
-            // Opportunities worth less than $500,000 or greater than $1 million
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                at: true, // insert anywhere (hash tag queries are not ordered)
-                type: 'insert',
-                value: [
-                    {
-                        tag: 'l500k',
-                        query: 'SalesPotential lt "500000"'
-                    },{
-                        tag: 'g1m',
-                        query: 'SalesPotential gt "1000000"'
-                    }]
-            });
-
             // Remove the hash tag "won" from Opportunity List View Search
             // so if a user types #won it will perform a normal search for "#won"
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                // since we are looking for a particular key use at()
-                // and test for the hash[key] existence
-                at: function(row) { return row['key'] == 'won'; },
-                type: 'remove'
-            });
+            // this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
+            //     // since we are looking for a particular key use at()
+            //     // and test for the hash[key] existence
+            //     at: function(row) { return row['key'] == 'won'; },
+            //     type: 'remove'
+            // });
 
             // Modify the hash tag "lost" from Opportunity List View Search
             // to mean Type =  "Product"
-            this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
-                // use at() to select our hash key
-                at: function(row) { return row['key'] == 'lost'; },
-                type: 'modify',
-                value: {
-                    query: 'Type eq "Product"'
-                }
-            });
+            // this.registerCustomization('list/hashTagQueries', 'opportunity_list', {
+            //     // use at() to select our hash key
+            //     at: function(row) { return row['key'] == 'lost'; },
+            //     type: 'modify',
+            //     value: {
+            //         query: 'Type eq "Product"'
+            //     }
+            // });
         },
         registerAccountCustomizations: function() {
 
@@ -583,7 +567,7 @@ define('Mobile/Sample/ApplicationModule', [
                 at: true,
                 type: 'insert',
                 value: {
-                    tag: 'mine',
+                    tag: '#mine',
                     query: function() {
                         return string.substitute('AccountManager.Id eq "${0}"', [App.context['user']['$key']]);
                     }
