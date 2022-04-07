@@ -26,6 +26,7 @@ define('Mobile/Sample/ApplicationModule', [
     'Mobile/Sample/Views/Contact/GroupList',
     'Mobile/Sample/Views/GoogleMap',
     'crm/Application',
+    'crm/DefaultMetrics',
     'argos/I18n'
 ], function(
     declare,
@@ -41,6 +42,7 @@ define('Mobile/Sample/ApplicationModule', [
     ContactGroupList,
     GoogleMap,
     CRMApplication,
+    DefaultMetrics,
     getResource
 ) {
     var resource = getResource('sampleApplicationModule');
@@ -106,11 +108,34 @@ define('Mobile/Sample/ApplicationModule', [
 
         },
         registerKPICustomizations: function() {
+            crm.DefaultMetrics.prototype.enableCustomizations = true; // bug in version < 4.3 of mobile
             this.registerCustomization('metrics/definitions', 'default_metrics', {
                 at: function(row) {
                     return row && row.queryArgs && row.queryArgs._metricName === 'AverageTimeAsCustomer';
                 },
                 type: 'remove'
+            });
+
+            this.registerCustomization('metrics/definitions', 'default_metrics', {
+                at: function(row) {
+                    return row && row.resourceKind === 'history';
+                },
+                type: 'insert',
+                value: {
+                    resourceKind: 'customEntity',
+                    children: [{
+                        title: 'Metric Title',
+                        queryName: 'executeMetric',
+                        queryArgs: {
+                        _filterName: 'FilterName',
+                        _metricName: 'CountCustomEntity',
+                        },
+                        chartType: 'bar',
+                        aggregate: 'sum',
+                        formatter: 'bigNumber',
+                        enabled: false,
+                    }],
+                }
             });
         },
         registerOpportunityCustomizations: function(){
@@ -229,6 +254,26 @@ define('Mobile/Sample/ApplicationModule', [
                 }
             });
 
+            this.registerCustomization('list/group-templates', 'account_list', {
+                at: function(i){
+                    return i.name === 'Detail';
+                },
+                type: 'insert',
+                where: 'before',
+                value: {
+                    name: 'Custom Summary',
+                    displayName: 'Custom Summary',
+                    type: 'Dynamic',
+                    options: {
+                      columns: [{
+                        id: 'col1',
+                        rows: 5,
+                        clss: 'custom-css-cls-here',
+                        hideLabels: true,
+                      }],
+                    },
+                }
+            });
 
             //Add a quick action to Account Detail
             this.registerCustomization('detail', 'account_detail', {
