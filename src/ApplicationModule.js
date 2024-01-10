@@ -658,7 +658,8 @@ define('Mobile/Sample/ApplicationModule', [
                             penColor: 'blue',
                             lineWidth:     1,
                             width:       180,
-                            height:       50
+                            height:       50,
+                            fillStyle: 'transparent',
                         },
                         true // return HTML <img>
                     )
